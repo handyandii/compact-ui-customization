@@ -10,3 +10,6 @@
 .externalNativeBuild
 .cxx
 local.properties
+
+# Local Claude Code context (fork notes, key locations); kept private
+/CLAUDE.md

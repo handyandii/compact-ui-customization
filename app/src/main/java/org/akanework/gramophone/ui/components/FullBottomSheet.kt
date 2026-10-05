@@ -59,7 +59,6 @@ import androidx.core.animation.addListener
 import androidx.core.animation.doOnEnd
 import androidx.core.content.edit
 import androidx.core.graphics.Insets
-import androidx.core.graphics.TypefaceCompat
 import androidx.core.os.BundleCompat
 import androidx.core.view.HapticFeedbackConstantsCompat
 import androidx.core.view.ViewCompat
@@ -124,6 +123,8 @@ import org.akanework.gramophone.logic.playOrPause
 import org.akanework.gramophone.logic.setTextAnimation
 import org.akanework.gramophone.logic.setTimer
 import org.akanework.gramophone.logic.startAnimation
+import org.akanework.gramophone.logic.ui.AccentColors
+import org.akanework.gramophone.logic.ui.AppFonts
 import org.akanework.gramophone.logic.updateMargin
 import org.akanework.gramophone.logic.utils.AudioFormatDetector
 import org.akanework.gramophone.logic.utils.AudioFormatDetector.AudioFormatInfo
@@ -695,7 +696,8 @@ class FullBottomSheet
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
         if (key == "color_accuracy" || key == "content_based_color") {
             if (DynamicColors.isDynamicColorAvailable() &&
-                prefs.getBooleanStrict("content_based_color", true)
+                prefs.getBooleanStrict("content_based_color", true) &&
+                !AccentColors.isFixedPalette(prefs)
             ) {
                 addColorScheme()
             } else {
@@ -734,9 +736,9 @@ class FullBottomSheet
         }
         if (key == null || key == "bold_title") {
             if (prefs.getBooleanStrict("bold_title", true)) {
-                bottomSheetFullTitle.typeface = TypefaceCompat.create(context, null, 600, false)
+                bottomSheetFullTitle.typeface = AppFonts.create(context, 600)
             } else {
-                bottomSheetFullTitle.typeface = TypefaceCompat.create(context, null, 400, false)
+                bottomSheetFullTitle.typeface = AppFonts.create(context, 400)
             }
         }
         if (key == null || key == "album_round_corner") {
@@ -1092,7 +1094,9 @@ class FullBottomSheet
             -1
         )
 
-        val colorOnSurface = MaterialColors.getColor(
+        // Only used for icons here, so a theme's player icon color can replace it.
+        val colorOnSurface = AccentColors.playerColor(ctx, R.attr.playerIconColor)
+            ?: MaterialColors.getColor(
             ctx,
             com.google.android.material.R.attr.colorOnSurface,
             -1
@@ -1125,15 +1129,18 @@ class FullBottomSheet
                 -1
             )
 
+        val colorPlayButton =
+            AccentColors.playerColor(ctx, R.attr.playerPlayButtonColor) ?: colorSecondaryContainer
+
         val colorOnSecondaryContainer =
-            MaterialColors.getColor(
+            AccentColors.playerColor(ctx, R.attr.playerOnPlayButtonColor) ?: MaterialColors.getColor(
                 ctx,
                 com.google.android.material.R.attr.colorOnSecondaryContainer,
                 -1
             )
 
         val selectorBackground =
-            AppCompatResources.getColorStateList(
+            AccentColors.playerToggleColors(ctx) ?: AppCompatResources.getColorStateList(
                 ctx,
                 R.color.sl_check_button
             )
@@ -1180,7 +1187,7 @@ class FullBottomSheet
 
             val secondaryContainerTransition = ValueAnimator.ofArgb(
                 bottomSheetFullControllerButton.backgroundTintList!!.defaultColor,
-                colorSecondaryContainer
+                colorPlayButton
             )
 
             val onSecondaryContainerTransition = ValueAnimator.ofArgb(
@@ -1391,7 +1398,7 @@ class FullBottomSheet
                 colorSecondary
             )
             bottomSheetFullControllerButton.backgroundTintList =
-                ColorStateList.valueOf(colorSecondaryContainer)
+                ColorStateList.valueOf(colorPlayButton)
             bottomSheetFullControllerButton.iconTint =
                 ColorStateList.valueOf(colorOnSecondaryContainer)
 
@@ -1452,7 +1459,7 @@ class FullBottomSheet
                 colorSecondary,
                 colorOnSurface,
                 colorOnSurfaceVariant,
-                colorSecondaryContainer,
+                colorPlayButton,
                 colorOnSecondaryContainer,
                 colorContrastFainted,
                 selectorBackground
@@ -1484,7 +1491,8 @@ class FullBottomSheet
                 error(R.drawable.ic_default_cover)
             }
             if (DynamicColors.isDynamicColorAvailable() &&
-                prefs.getBooleanStrict("content_based_color", true)
+                prefs.getBooleanStrict("content_based_color", true) &&
+                !AccentColors.isFixedPalette(prefs)
             ) {
                 addColorScheme()
             }

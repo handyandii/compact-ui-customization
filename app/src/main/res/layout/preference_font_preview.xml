@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Widget for FontPreference: a sample of the current app font. -->
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/font_preview"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:importantForAccessibility="no"
+    android:text="@string/app_font_preview"
+    android:textColor="?attr/colorPrimary"
+    android:textSize="24sp" />

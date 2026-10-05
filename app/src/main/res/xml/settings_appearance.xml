@@ -40,6 +40,14 @@
             android:widgetLayout="@layout/preference_accent_swatch"
             app:iconSpaceReserved="false" />
 
+        <org.akanework.gramophone.ui.components.FontPreference
+            android:defaultValue="system"
+            android:key="app_font"
+            android:layout="@layout/preference_switch"
+            android:title="@string/settings_app_font"
+            android:widgetLayout="@layout/preference_font_preview"
+            app:iconSpaceReserved="false" />
+
         <SwitchPreferenceCompat
             android:defaultValue="false"
             android:key="pureDark"

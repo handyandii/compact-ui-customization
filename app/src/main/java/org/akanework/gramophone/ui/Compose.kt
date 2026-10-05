@@ -9,6 +9,7 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Typography
 import androidx.compose.material3.contentColorFor
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.dynamicDarkColorScheme
@@ -21,6 +22,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontFamily
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.PreferenceManager
 import com.google.android.material.color.MaterialColors
@@ -32,6 +34,7 @@ import kotlinx.coroutines.flow.stateIn
 import org.akanework.gramophone.logic.enableEdgeToEdgeProperly
 import org.akanework.gramophone.logic.getBooleanStrict
 import org.akanework.gramophone.logic.ui.AccentColors
+import org.akanework.gramophone.logic.ui.AppFonts
 
 abstract class BaseComposeActivity : AppCompatActivity() {
     private lateinit var prefs: SharedPreferences
@@ -50,6 +53,13 @@ abstract class BaseComposeActivity : AppCompatActivity() {
             lifecycleScope, WhileSubscribed(),
             prefs.getBooleanStrict("pureDark", false)
         )
+    }
+
+    override fun attachBaseContext(newBase: Context) {
+        // Fixed light or dark color themes override the app's dark mode setting.
+        delegate.localNightMode =
+            AccentColors.nightMode(PreferenceManager.getDefaultSharedPreferences(newBase))
+        super.attachBaseContext(newBase)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -79,6 +89,9 @@ fun GramophoneTheme(
     val accentPreset = remember(context) {
         AccentColors.selected(PreferenceManager.getDefaultSharedPreferences(context.applicationContext))
     }
+    val typography = remember(context) {
+        AppFonts.typeface(context)?.let { appTypography(FontFamily(it)) } ?: Typography()
+    }
     MaterialTheme(
         colorScheme = (if (accentPreset != null) {
             // A color theme preset is applied to the view theme, use it instead of device colors.
@@ -106,7 +119,7 @@ fun GramophoneTheme(
                 dynamicLightColorScheme(LocalContext.current)
             else
                 lightColorScheme()
-        }), content = {
+        }), typography = typography, content = {
             CompositionLocalProvider(
                 LocalContentColor provides contentColorFor(MaterialTheme.colorScheme.surface),
             ) {
@@ -155,5 +168,26 @@ private fun themeColorScheme(context: Context, dark: Boolean): ColorScheme {
         surfaceContainer = c(com.google.android.material.R.attr.colorSurfaceContainer),
         surfaceContainerHigh = c(com.google.android.material.R.attr.colorSurfaceContainerHigh),
         surfaceContainerHighest = c(com.google.android.material.R.attr.colorSurfaceContainerHighest),
+    )
+}
+
+/** The default Material 3 type scale in the app font (see [AppFonts]). */
+private fun appTypography(family: FontFamily): Typography = Typography().run {
+    copy(
+        displayLarge = displayLarge.copy(fontFamily = family),
+        displayMedium = displayMedium.copy(fontFamily = family),
+        displaySmall = displaySmall.copy(fontFamily = family),
+        headlineLarge = headlineLarge.copy(fontFamily = family),
+        headlineMedium = headlineMedium.copy(fontFamily = family),
+        headlineSmall = headlineSmall.copy(fontFamily = family),
+        titleLarge = titleLarge.copy(fontFamily = family),
+        titleMedium = titleMedium.copy(fontFamily = family),
+        titleSmall = titleSmall.copy(fontFamily = family),
+        bodyLarge = bodyLarge.copy(fontFamily = family),
+        bodyMedium = bodyMedium.copy(fontFamily = family),
+        bodySmall = bodySmall.copy(fontFamily = family),
+        labelLarge = labelLarge.copy(fontFamily = family),
+        labelMedium = labelMedium.copy(fontFamily = family),
+        labelSmall = labelSmall.copy(fontFamily = family),
     )
 }

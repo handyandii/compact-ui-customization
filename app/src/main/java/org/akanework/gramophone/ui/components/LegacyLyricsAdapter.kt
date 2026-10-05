@@ -14,7 +14,6 @@ import android.view.ViewGroup
 import android.view.animation.PathInterpolator
 import android.widget.TextView
 import androidx.core.animation.doOnEnd
-import androidx.core.graphics.TypefaceCompat
 import androidx.core.view.HapticFeedbackConstantsCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.doOnLayout
@@ -25,6 +24,7 @@ import com.google.android.material.card.MaterialCardView
 import org.akanework.gramophone.R
 import org.akanework.gramophone.logic.dpToPx
 import org.akanework.gramophone.logic.getBooleanStrict
+import org.akanework.gramophone.logic.ui.AppFonts
 import org.akanework.gramophone.logic.ui.CustomSmoothScroller
 import org.akanework.gramophone.logic.ui.MyRecyclerView
 import org.akanework.gramophone.logic.utils.SemanticLyrics
@@ -108,9 +108,9 @@ class LegacyLyricsAdapter(
                 if (position + 1 < lyricList.size && lyricList[position + 1].isTranslation) 2 else 18
 
             if (isBoldEnabled) {
-                this.typeface = TypefaceCompat.create(context, null, 700, false)
+                this.typeface = AppFonts.create(context, 700)
             } else {
-                this.typeface = TypefaceCompat.create(context, null, 500, false)
+                this.typeface = AppFonts.create(context, 500)
             }
 
             if (isLyricCentered) {

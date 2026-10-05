@@ -82,4 +82,40 @@
 
     </PreferenceCategory>
 
+    <PreferenceCategory
+        android:layout="@layout/preference_category_md"
+        android:title="@string/settings_category_controller">
+
+        <SwitchPreferenceCompat
+            android:defaultValue="true"
+            android:key="controller_buttons"
+            android:layout="@layout/preference_switch"
+            android:summary="@string/settings_controller_buttons_summary"
+            android:title="@string/settings_controller_buttons"
+            android:widgetLayout="@layout/preference_switch_widget"
+            app:iconSpaceReserved="false" />
+
+        <org.akanework.gramophone.ui.components.ControllerButtonPreference
+            android:dependency="controller_buttons"
+            android:key="controller_key_play_pause"
+            android:layout="@layout/preference_switch"
+            android:title="@string/controller_action_play_pause"
+            app:iconSpaceReserved="false" />
+
+        <org.akanework.gramophone.ui.components.ControllerButtonPreference
+            android:dependency="controller_buttons"
+            android:key="controller_key_previous"
+            android:layout="@layout/preference_switch"
+            android:title="@string/controller_action_previous"
+            app:iconSpaceReserved="false" />
+
+        <org.akanework.gramophone.ui.components.ControllerButtonPreference
+            android:dependency="controller_buttons"
+            android:key="controller_key_next"
+            android:layout="@layout/preference_switch"
+            android:title="@string/controller_action_next"
+            app:iconSpaceReserved="false" />
+
+    </PreferenceCategory>
+
 </PreferenceScreen>

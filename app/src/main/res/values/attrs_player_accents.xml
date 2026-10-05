@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Optional player control colors a color theme can set (see themes_fixed_presets.xml). When a
+     theme leaves them out, the player uses its normal Material colors. Read by
+     AccentColors.playerColor() in FullBottomSheet.applyColorScheme(). -->
+<resources>
+    <!-- Play/pause button background (default colorSecondaryContainer) and icon (default colorOnSecondaryContainer). -->
+    <attr name="playerPlayButtonColor" format="color" />
+    <attr name="playerOnPlayButtonColor" format="color" />
+    <!-- Previous/next and the other player icons (default colorOnSurface). -->
+    <attr name="playerIconColor" format="color" />
+    <!-- Repeat/shuffle when on (default colorOnSurface) and off (default colorOutlineVariant). -->
+    <attr name="playerToggleOnColor" format="color" />
+    <attr name="playerToggleOffColor" format="color" />
+</resources>

@@ -17,6 +17,7 @@
 
 package org.akanework.gramophone.logic.ui
 
+import android.content.Context
 import android.content.SharedPreferences
 import android.content.res.Configuration
 import android.os.Bundle
@@ -33,9 +34,16 @@ open class BaseActivity : AppCompatActivity() {
         ) {
             recreate()
         }
-        if (key == AccentColors.PREF_KEY) {
+        if (key == AccentColors.PREF_KEY || key == AppFonts.PREF_KEY) {
             recreate()
         }
+    }
+
+    override fun attachBaseContext(newBase: Context) {
+        // Fixed light or dark color themes override the app's dark mode setting.
+        delegate.localNightMode =
+            AccentColors.nightMode(PreferenceManager.getDefaultSharedPreferences(newBase))
+        super.attachBaseContext(newBase)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

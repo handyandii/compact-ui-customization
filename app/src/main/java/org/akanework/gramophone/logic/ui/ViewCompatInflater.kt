@@ -21,10 +21,13 @@ import android.content.Context
 import android.content.res.TypedArray
 import android.util.AttributeSet
 import android.view.View
+import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatTextView
+import androidx.appcompat.widget.Toolbar
 import androidx.appcompat.widget.TooltipCompat
 import androidx.core.graphics.TypefaceCompat
+import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.android.material.textview.MaterialTextView
 import com.google.android.material.theme.MaterialComponentsViewInflater
 import org.akanework.gramophone.R
@@ -56,6 +59,7 @@ class ViewCompatInflater
                     val tf = TypefaceCompat.create(context, typeface, fontWeight, typeface.isItalic)
                     setTypeface(tf)
                 }
+                AppFonts.applyTo(this)
             }
 
             @Deprecated(
@@ -76,6 +80,7 @@ class ViewCompatInflater
                     val tf = TypefaceCompat.create(context, typeface, fontWeight, typeface.isItalic)
                     setTypeface(tf)
                 }
+                AppFonts.applyTo(this)
             }
 
         }
@@ -130,6 +135,25 @@ class ViewCompatInflater
                         result.typeface.isItalic
                     )
                     result.setTypeface(tf)
+                }
+                AppFonts.applyTo(result)
+            } else if (result is Toolbar) {
+                // Toolbar creates its title views itself instead of inflating them.
+                for (i in 0 until result.childCount) {
+                    (result.getChildAt(i) as? TextView)?.let { AppFonts.applyTo(it) }
+                }
+                result.setOnHierarchyChangeListener(object : ViewGroup.OnHierarchyChangeListener {
+                    override fun onChildViewAdded(parent: View?, child: View?) {
+                        if (child is TextView) AppFonts.applyTo(child)
+                    }
+
+                    override fun onChildViewRemoved(parent: View?, child: View?) {}
+                })
+            } else if (result is CollapsingToolbarLayout) {
+                // The large title is drawn by CollapsingToolbarLayout, not by a TextView.
+                AppFonts.typeface(context)?.let {
+                    result.setCollapsedTitleTypeface(it)
+                    result.setExpandedTitleTypeface(it)
                 }
             }
             val a = context.theme.obtainStyledAttributes(

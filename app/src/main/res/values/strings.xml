@@ -1340,4 +1340,56 @@ supporting local search. This string is displayed in the search bar when using G
     <string name="accent_color_yellow">Yellow</string>
     <string name="accent_color_orange">Orange</string>
     <string name="accent_color_grey">Grey</string>
+    <!-- Color theme: pure black background with white text, always dark -->
+    <string name="accent_color_black_white">Black &amp; white</string>
+    <!-- Color theme: grey-green background with dark grey text like an old monochrome LCD screen, always light -->
+    <string name="accent_color_lcd">LCD</string>
+    <!-- Color theme named after the Dracula color scheme, always dark -->
+    <string name="accent_color_dracula" translatable="false">Dracula</string>
+    <!-- Settings entry / dialog title: app wide font -->
+    <string name="settings_app_font">Font</string>
+    <!-- Font option: keep the font the device/system provides -->
+    <string name="app_font_system">Device default</string>
+    <!-- Font sample shown next to each font name, in that font -->
+    <string name="app_font_preview" translatable="false">Aa</string>
+    <string name="app_font_atkinson_hyperlegible" translatable="false">Atkinson Hyperlegible</string>
+    <string name="app_font_nunito" translatable="false">Nunito</string>
+    <string name="app_font_space_grotesk" translatable="false">Space Grotesk</string>
+    <string name="app_font_jetbrains_mono" translatable="false">JetBrains Mono</string>
+    <string name="app_font_pixelify_sans" translatable="false">Pixelify Sans</string>
+    <string name="app_font_vt323" translatable="false">VT323</string>
+    <!-- Font picker row: pick a .ttf/.otf font file from the device and add it to the list -->
+    <string name="app_font_import">Import font file…</string>
+    <!-- Shown when the picked file is not a font that can be used -->
+    <string name="app_font_import_failed">That file couldn\'t be used as a font. Choose a .ttf or .otf file.</string>
+    <!-- Button (content description) and dialog title for removing an imported font -->
+    <string name="app_font_remove">Remove font</string>
+    <!-- Confirmation for removing an imported font, %1$s is the font name -->
+    <string name="app_font_remove_confirm">Remove %1$s from the app? The original file on your device is not affected.</string>
+    <!-- Confirm button for removing an imported font -->
+    <string name="app_font_remove_action">Remove</string>
+    <!-- Settings category for game controller (handheld gamepad) support -->
+    <string name="settings_category_controller">Game controller</string>
+    <!-- Settings switch: use gamepad buttons to control playback -->
+    <string name="settings_controller_buttons">Controller playback buttons</string>
+    <!-- Summary for the controller buttons switch, names the gamepad buttons -->
+    <string name="settings_controller_buttons_summary">Control playback with the buttons set below</string>
+    <!-- Controller action names, shown in the controller button list -->
+    <string name="controller_action_play_pause">Play/pause</string>
+    <string name="controller_action_previous">Previous track</string>
+    <string name="controller_action_next">Next track</string>
+    <!-- Controller action without a button -->
+    <string name="controller_button_not_set">Not set</string>
+    <!-- Controller button dialog: the button currently doing this action, %1$s is the button name (e.g. L1) -->
+    <string name="controller_button_current">Current button: %1$s\n\nTap Set, then press the button you want to use instead.</string>
+    <!-- Controller button dialog when the action has no button -->
+    <string name="controller_button_none">No button is set.\n\nTap Set, then press the button you want to use.</string>
+    <!-- Controller button dialog: start listening for a new button -->
+    <string name="controller_button_set">Set</string>
+    <!-- Controller button dialog: go back to the default button -->
+    <string name="controller_button_default">Default</string>
+    <!-- Controller button dialog while waiting for a press, %1$s is the action (e.g. Play/pause) -->
+    <string name="controller_button_waiting">Press the button to use for %1$s.\n\nTap Cancel to stop. The action stays without a button until you set one.</string>
+    <!-- Toast: a button was moved from another action, %1$s is the button, %2$s the other action -->
+    <string name="controller_button_moved">%1$s no longer does %2$s</string>
 </resources>

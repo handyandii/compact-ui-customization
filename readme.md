@@ -1,6 +1,6 @@
 # Custom Compact Gramophone
 
-An unofficial fork of [Gramophone](https://github.com/FoedusProgramme/Gramophone), the lightweight Material 3 music player. It adds a **compact now playing screen** for square and wide screens (4:3, 3:2, 1:1, common on retro handhelds) and **app-wide color themes** that work on every device.
+An unofficial fork of [Gramophone](https://github.com/FoedusProgramme/Gramophone), the lightweight Material 3 music player. It adds a **compact now playing screen** for square and wide screens (4:3, 3:2, 1:1, common on retro handhelds) plus **app-wide color themes** that work on every device, **custom fonts** and **game controller buttons**.
 
 > [!WARNING]
 > **Unofficial, AI-assisted fork.** The changes in this fork were written with the help of Claude (an AI coding assistant from Anthropic) and have **not** been reviewed by the Gramophone maintainers. Please don't report bugs from this fork to the upstream Gramophone project. Open an issue here instead.
@@ -23,8 +23,18 @@ Gramophone's now playing screen is designed for tall portrait phones. On square 
 Pick the app's colors yourself in *Settings → Appearance → Color theme*:
 
 - **10 themes:** Red, Pink, Purple, Indigo, Blue, Teal, Green, Yellow, Orange and Grey, or **Device default** to keep the original behavior.
+- **3 special themes:** **Black & white** (pure black background, white text), **LCD** (grey-green background with dark grey text, like an old monochrome screen) and **Dracula**. These always stay dark (or, for LCD, light), and they also apply to the now playing screen instead of album-art colors.
 - **Light and dark:** every theme has a full light and dark version, and follows the Light/Dark/System setting and Pure dark.
 - **Works on any device and Android version**, including devices where Android's own dynamic colors (Material You) aren't available.
+
+### Fonts
+Change the app's font in *Settings → Appearance → Font*:
+
+- **Built-in fonts:** Atkinson Hyperlegible, Nunito, Space Grotesk, JetBrains Mono, Pixelify Sans and VT323, or **Device default**.
+- **Your own fonts:** import any `.ttf` or `.otf` file from your device. Imported fonts stay in the list until you remove them.
+
+### Game controller buttons
+On handhelds with built-in controls, **Start** plays and pauses, **L1** goes to the previous track and **R1** to the next one. In *Settings → Behavior → Game controller* you can turn this off or set a different button for each action: tap the action, tap **Set**, then press the button you want.
 
 ### Fixes
 - The cookie-shaped album cover no longer cuts off the image when the cover changes size.
@@ -63,7 +73,7 @@ You need a recent [Android Studio](https://developer.android.com/studio) (or jus
 
 APKs are written to `app/build/outputs/apk/<debug|release>/CustomCompactGramophone-<version>-<type>.apk`.
 
-For how the compact player and color themes work, the full list of changed files, and known limitations, see [compact_device_screen_support.md](compact_device_screen_support.md).
+For how the compact player, color themes, fonts and controller buttons work, the full list of changed files, and known limitations, see [compact_device_screen_support.md](compact_device_screen_support.md).
 
 ## FAQ
 These come from upstream Gramophone and apply to this fork too.
@@ -85,6 +95,8 @@ The exception is ALAC: it plays even without a system decoder, using a small bui
 
 ## Credits
 - **[Gramophone](https://github.com/FoedusProgramme/Gramophone)** by the Akane Foundation / FoedusProgramme and all its contributors. Almost all of this app is their work. If you like it, support and star the original project.
+- **Built-in fonts:** [Atkinson Hyperlegible](https://github.com/googlefonts/atkinson-hyperlegible) (Braille Institute), [Nunito](https://github.com/googlefonts/nunito), [Space Grotesk](https://github.com/floriankarsten/space-grotesk), [JetBrains Mono](https://github.com/JetBrains/JetBrainsMono), [Pixelify Sans](https://github.com/eifetx/Pixelify-Sans) and [VT323](https://fonts.google.com/specimen/VT323), all under the SIL Open Font License 1.1. License files are in [misc/font_licenses](misc/font_licenses).
+- **[Dracula](https://draculatheme.com)** color palette by Zeno Rocha.
 - **Fork changes** written with Claude (Anthropic), directed and tested by [handyandii](https://github.com/handyandii).
 
 ## License

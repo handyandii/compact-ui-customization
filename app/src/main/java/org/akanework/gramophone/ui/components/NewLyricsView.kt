@@ -37,7 +37,6 @@ import android.view.MotionEvent
 import android.view.animation.AnimationUtils
 import android.view.animation.PathInterpolator
 import androidx.core.graphics.ColorUtils
-import androidx.core.graphics.TypefaceCompat
 import androidx.core.text.getSpans
 import androidx.core.util.forEach
 import androidx.media3.common.util.Log
@@ -47,6 +46,7 @@ import org.akanework.gramophone.logic.dpToPx
 import org.akanework.gramophone.logic.getBooleanStrict
 import org.akanework.gramophone.logic.getIntStrict
 import org.akanework.gramophone.logic.hasRenderNodes
+import org.akanework.gramophone.logic.ui.AppFonts
 import org.akanework.gramophone.logic.ui.spans.MyForegroundColorSpan
 import org.akanework.gramophone.logic.ui.spans.MyGradientSpan
 import org.akanework.gramophone.logic.ui.spans.StaticLayoutBuilderCompat
@@ -271,9 +271,9 @@ class NewLyricsView(context: Context, attrs: AttributeSet?) : ScrollingView2(con
 
     private fun applyTypefaces() {
         typeface = if (prefs.getBooleanStrict("lyric_bold", false)) {
-            TypefaceCompat.create(context, null, 700, false)
+            AppFonts.create(context, 700)
         } else {
-            TypefaceCompat.create(context, null, 500, false)
+            AppFonts.create(context, 500)
         }
         defaultTextPaint.typeface = typeface
         translationTextPaint.typeface = typeface

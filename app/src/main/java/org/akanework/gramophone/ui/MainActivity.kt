@@ -39,6 +39,7 @@ import android.os.StrictMode
 import android.provider.MediaStore
 import android.provider.Settings
 import android.view.Choreographer
+import android.view.KeyEvent
 import android.view.SearchEvent
 import android.view.ViewGroup
 import android.widget.ProgressBar
@@ -91,6 +92,7 @@ import org.akanework.gramophone.logic.hasScopedStorageV2
 import org.akanework.gramophone.logic.hasScopedStorageWithMediaTypes
 import org.akanework.gramophone.logic.needsMissingOnDestroyCallWorkarounds
 import org.akanework.gramophone.logic.postAtFrontOfQueueAsync
+import org.akanework.gramophone.logic.ui.ControllerButtons
 import org.akanework.gramophone.logic.ui.BaseActivity
 import org.akanework.gramophone.ui.adapters.PlaylistAdapter
 import org.akanework.gramophone.ui.components.PlayerBottomSheet
@@ -838,6 +840,9 @@ class MainActivity : BaseActivity() {
         // (this is placed after super.onDestroy() to make sure all ImageViews are dead)
         imageLoader.memoryCache?.clear()
     }
+
+    override fun dispatchKeyEvent(event: KeyEvent): Boolean =
+        ControllerButtons.handle(event, prefs) { getPlayer() } || super.dispatchKeyEvent(event)
 
     /**
      * getPlayer:

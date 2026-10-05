@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- One row in the font picker dialog: a preview, the font name, and for imported fonts a
+     remove button. The import row shows an icon instead of the preview. -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="56dp"
+    android:background="?attr/selectableItemBackground"
+    android:descendantFocusability="blocksDescendants"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:paddingStart="24dp"
+    android:paddingEnd="12dp">
+
+    <FrameLayout
+        android:layout_width="40dp"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/font_preview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:importantForAccessibility="no"
+            android:text="@string/app_font_preview"
+            android:textColor="?attr/colorPrimary"
+            android:textSize="22sp" />
+
+        <ImageView
+            android:id="@+id/font_icon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="center"
+            android:importantForAccessibility="no"
+            android:src="@drawable/outline_add_24"
+            android:visibility="gone"
+            app:tint="?attr/colorPrimary" />
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/font_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_weight="1"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textAppearance="?attr/textAppearanceBodyLarge"
+        android:textColor="?attr/colorOnSurface"
+        tools:text="Atkinson Hyperlegible" />
+
+    <ImageView
+        android:id="@+id/font_check"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginHorizontal="12dp"
+        android:importantForAccessibility="no"
+        android:src="@drawable/ic_check"
+        app:tint="?attr/colorPrimary" />
+
+    <ImageButton
+        android:id="@+id/font_remove"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="@string/app_font_remove"
+        android:focusable="false"
+        android:src="@drawable/ic_close"
+        app:tint="?attr/colorOnSurfaceVariant" />
+
+</LinearLayout>

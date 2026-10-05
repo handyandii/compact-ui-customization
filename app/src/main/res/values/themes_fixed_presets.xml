@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Hand-made color theme presets (not generated, edit freely). Unlike the seed based presets in
+     themes_accent_presets.xml these are fixed palettes, and AccentColors forces the activity into
+     dark (Black and white, Dracula) or light (LCD) mode for them, so the same colors apply in both modes. -->
+<resources>
+
+    <!-- Black and white: pure black background, white text and controls. -->
+    <style name="ThemeOverlay.Gramophone.Accent.BlackWhite" parent="">
+        <item name="colorPrimary">#FFFFFF</item>
+        <item name="colorOnPrimary">#000000</item>
+        <item name="colorPrimaryContainer">#FFFFFF</item>
+        <item name="colorOnPrimaryContainer">#000000</item>
+        <item name="colorSecondary">#FFFFFF</item>
+        <item name="colorOnSecondary">#000000</item>
+        <item name="colorSecondaryContainer">#333333</item>
+        <item name="colorOnSecondaryContainer">#FFFFFF</item>
+        <item name="colorTertiary">#FFFFFF</item>
+        <item name="colorOnTertiary">#000000</item>
+        <item name="colorTertiaryContainer">#333333</item>
+        <item name="colorOnTertiaryContainer">#FFFFFF</item>
+        <item name="colorError">#FFB4AB</item>
+        <item name="colorOnError">#690005</item>
+        <item name="colorErrorContainer">#93000A</item>
+        <item name="colorOnErrorContainer">#FFDAD6</item>
+        <item name="android:colorBackground">#000000</item>
+        <item name="colorOnBackground">#FFFFFF</item>
+        <item name="colorSurface">#000000</item>
+        <item name="colorOnSurface">#FFFFFF</item>
+        <item name="colorSurfaceVariant">#000000</item>
+        <item name="colorOnSurfaceVariant">#FFFFFF</item>
+        <item name="colorOutline">#BDBDBD</item>
+        <item name="colorOutlineVariant">#5E5E5E</item>
+        <item name="colorSurfaceInverse">#FFFFFF</item>
+        <item name="colorOnSurfaceInverse">#000000</item>
+        <item name="colorPrimaryInverse">#000000</item>
+        <item name="colorPrimaryFixed">#FFFFFF</item>
+        <item name="colorOnPrimaryFixed">#000000</item>
+        <item name="colorPrimaryFixedDim">#E0E0E0</item>
+        <item name="colorOnPrimaryFixedVariant">#000000</item>
+        <item name="colorSecondaryFixed">#FFFFFF</item>
+        <item name="colorOnSecondaryFixed">#000000</item>
+        <item name="colorSecondaryFixedDim">#E0E0E0</item>
+        <item name="colorOnSecondaryFixedVariant">#000000</item>
+        <item name="colorTertiaryFixed">#FFFFFF</item>
+        <item name="colorOnTertiaryFixed">#000000</item>
+        <item name="colorTertiaryFixedDim">#E0E0E0</item>
+        <item name="colorOnTertiaryFixedVariant">#000000</item>
+        <item name="colorSurfaceDim">#000000</item>
+        <item name="colorSurfaceBright">#000000</item>
+        <item name="colorSurfaceContainerLowest">#000000</item>
+        <item name="colorSurfaceContainerLow">#000000</item>
+        <item name="colorSurfaceContainer">#000000</item>
+        <item name="colorSurfaceContainerHigh">#000000</item>
+        <item name="colorSurfaceContainerHighest">#000000</item>
+        <item name="android:textColorPrimary">#FFFFFF</item>
+        <item name="android:textColorSecondary">#FFFFFF</item>
+        <item name="android:textColorTertiary">#8AFFFFFF</item>
+        <item name="previewPlayerElevation">0dp</item>
+    </style>
+
+    <!-- LCD: grey-green background with dark grey text, like a monochrome LCD. -->
+    <style name="ThemeOverlay.Gramophone.Accent.Lcd" parent="">
+        <item name="colorPrimary">#1E211A</item>
+        <item name="colorOnPrimary">#C4CCB3</item>
+        <item name="colorPrimaryContainer">#3A3E34</item>
+        <item name="colorOnPrimaryContainer">#D6DCC8</item>
+        <item name="colorSecondary">#3A3E34</item>
+        <item name="colorOnSecondary">#C4CCB3</item>
+        <item name="colorSecondaryContainer">#1E211A</item>
+        <item name="colorOnSecondaryContainer">#C4CCB3</item>
+        <item name="colorTertiary">#4E5347</item>
+        <item name="colorOnTertiary">#C4CCB3</item>
+        <item name="colorTertiaryContainer">#9AA28A</item>
+        <item name="colorOnTertiaryContainer">#1E211A</item>
+        <item name="colorError">#8C1D18</item>
+        <item name="colorOnError">#F2F2E6</item>
+        <item name="colorErrorContainer">#E0B8A8</item>
+        <item name="colorOnErrorContainer">#410E0B</item>
+        <item name="android:colorBackground">#C4CCB3</item>
+        <item name="colorOnBackground">#1E211A</item>
+        <item name="colorSurface">#C4CCB3</item>
+        <item name="colorOnSurface">#1E211A</item>
+        <item name="colorSurfaceVariant">#B4BCA2</item>
+        <item name="colorOnSurfaceVariant">#3A3E34</item>
+        <item name="colorOutline">#4E5347</item>
+        <item name="colorOutlineVariant">#9AA28A</item>
+        <item name="colorSurfaceInverse">#2E3229</item>
+        <item name="colorOnSurfaceInverse">#C4CCB3</item>
+        <item name="colorPrimaryInverse">#C4CCB3</item>
+        <item name="colorPrimaryFixed">#D6DCC8</item>
+        <item name="colorOnPrimaryFixed">#1E211A</item>
+        <item name="colorPrimaryFixedDim">#AEB69C</item>
+        <item name="colorOnPrimaryFixedVariant">#3A3E34</item>
+        <item name="colorSecondaryFixed">#D6DCC8</item>
+        <item name="colorOnSecondaryFixed">#1E211A</item>
+        <item name="colorSecondaryFixedDim">#AEB69C</item>
+        <item name="colorOnSecondaryFixedVariant">#3A3E34</item>
+        <item name="colorTertiaryFixed">#D6DCC8</item>
+        <item name="colorOnTertiaryFixed">#1E211A</item>
+        <item name="colorTertiaryFixedDim">#AEB69C</item>
+        <item name="colorOnTertiaryFixedVariant">#3A3E34</item>
+        <item name="colorSurfaceDim">#AAB298</item>
+        <item name="colorSurfaceBright">#D0D7C1</item>
+        <item name="colorSurfaceContainerLowest">#CDD4BD</item>
+        <item name="colorSurfaceContainerLow">#C0C8AE</item>
+        <item name="colorSurfaceContainer">#BAC2A8</item>
+        <item name="colorSurfaceContainerHigh">#B4BCA2</item>
+        <item name="colorSurfaceContainerHighest">#AEB69C</item>
+        <item name="android:textColorPrimary">#1E211A</item>
+        <item name="android:textColorSecondary">#3A3E34</item>
+        <item name="android:textColorTertiary">#8A1E211A</item>
+    </style>
+
+    <!-- Dracula (draculatheme.com): dark purple-grey background, off-white text, purple/pink/cyan accents. -->
+    <style name="ThemeOverlay.Gramophone.Accent.Dracula" parent="">
+        <item name="colorPrimary">#BD93F9</item>
+        <item name="colorOnPrimary">#282A36</item>
+        <item name="colorPrimaryContainer">#5A4A8A</item>
+        <item name="colorOnPrimaryContainer">#F8F8F2</item>
+        <item name="colorSecondary">#FF79C6</item>
+        <item name="colorOnSecondary">#282A36</item>
+        <item name="colorSecondaryContainer">#44475A</item>
+        <item name="colorOnSecondaryContainer">#F8F8F2</item>
+        <item name="colorTertiary">#8BE9FD</item>
+        <item name="colorOnTertiary">#282A36</item>
+        <item name="colorTertiaryContainer">#1E5C68</item>
+        <item name="colorOnTertiaryContainer">#F8F8F2</item>
+        <item name="colorError">#FF5555</item>
+        <item name="colorOnError">#282A36</item>
+        <item name="colorErrorContainer">#5C1F24</item>
+        <item name="colorOnErrorContainer">#FFD6D6</item>
+        <item name="android:colorBackground">#282A36</item>
+        <item name="colorOnBackground">#F8F8F2</item>
+        <item name="colorSurface">#282A36</item>
+        <item name="colorOnSurface">#F8F8F2</item>
+        <item name="colorSurfaceVariant">#44475A</item>
+        <item name="colorOnSurfaceVariant">#BDC1D9</item>
+        <item name="colorOutline">#6272A4</item>
+        <item name="colorOutlineVariant">#44475A</item>
+        <item name="colorSurfaceInverse">#F8F8F2</item>
+        <item name="colorOnSurfaceInverse">#282A36</item>
+        <item name="colorPrimaryInverse">#6D4FA8</item>
+        <item name="colorPrimaryFixed">#E6D9FD</item>
+        <item name="colorOnPrimaryFixed">#282A36</item>
+        <item name="colorPrimaryFixedDim">#BD93F9</item>
+        <item name="colorOnPrimaryFixedVariant">#44475A</item>
+        <item name="colorSecondaryFixed">#FFD6EE</item>
+        <item name="colorOnSecondaryFixed">#282A36</item>
+        <item name="colorSecondaryFixedDim">#FF79C6</item>
+        <item name="colorOnSecondaryFixedVariant">#44475A</item>
+        <item name="colorTertiaryFixed">#D5F6FE</item>
+        <item name="colorOnTertiaryFixed">#282A36</item>
+        <item name="colorTertiaryFixedDim">#8BE9FD</item>
+        <item name="colorOnTertiaryFixedVariant">#44475A</item>
+        <item name="colorSurfaceDim">#21222C</item>
+        <item name="colorSurfaceBright">#44475A</item>
+        <item name="colorSurfaceContainerLowest">#191A21</item>
+        <item name="colorSurfaceContainerLow">#21222C</item>
+        <item name="colorSurfaceContainer">#2E303E</item>
+        <item name="colorSurfaceContainerHigh">#343746</item>
+        <item name="colorSurfaceContainerHighest">#3B3E4F</item>
+        <item name="android:textColorPrimary">#F8F8F2</item>
+        <item name="android:textColorSecondary">#BDC1D9</item>
+        <item name="android:textColorTertiary">#6272A4</item>
+        <!-- Player controls: green play button, cyan icons, green repeat/shuffle when on. -->
+        <item name="playerPlayButtonColor">#50FA7B</item>
+        <item name="playerOnPlayButtonColor">#282A36</item>
+        <item name="playerIconColor">#8BE9FD</item>
+        <item name="playerToggleOnColor">#50FA7B</item>
+        <item name="playerToggleOffColor">#6272A4</item>
+    </style>
+</resources>

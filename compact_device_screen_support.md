@@ -153,13 +153,38 @@ This one isn't specific to compact screens. It was asked for alongside the compa
 
 Before this, the app's colors came from the system: wallpaper-based Material You colors on Android 12+ (only on devices whose maker Google has allowlisted for dynamic color), or a fixed built-in palette otherwise. There was a Light/Dark/System setting but no color choice.
 
-- **Setting:** **Settings → Appearance → "Color theme"** (`app_accent_color`). Tapping it opens a menu of color swatches: **Device default** (the old behavior, also the default) plus 10 themes: Red, Pink, Purple, Indigo, Blue, Teal, Green, Yellow, Orange and Grey. The settings entry shows the current color as a swatch.
-- **Light and dark:** every theme has a full Material 3 light *and* dark color scheme, and follows the existing Light/Dark/System setting. Pure dark still works on top.
+- **Setting:** **Settings → Appearance → "Color theme"** (`app_accent_color`). Tapping it opens a menu of color swatches: **Device default** (the old behavior, also the default) plus 10 seed-based themes (Red, Pink, Purple, Indigo, Blue, Teal, Green, Yellow, Orange and Grey) and 3 fixed themes (Black & white, LCD and Dracula, see below). The settings entry shows the current color as a swatch.
+- **Light and dark:** every seed-based theme has a full Material 3 light *and* dark color scheme, and follows the existing Light/Dark/System setting. Pure dark still works on top.
 - **Works on every device.** The palettes are generated ahead of time and compiled into the app as theme overlays, so they don't depend on the device's dynamic color support. That matters for devices like the ARBOR GT78 (Android 12, not on Material's dynamic color allowlist), where dynamic color is switched off.
 - **How it's applied:** `AccentColors.applyTo()` applies the selected overlay to the activity theme before `super.onCreate()`, in `BaseActivity` (every View-based activity) and `BaseComposeActivity`. Changing the setting recreates open activities, so it applies right away.
 - **Compose screens:** Compose UI (the queue sheet, licenses, contributors) used the device's dynamic colors directly. With a theme selected, `GramophoneTheme` now builds its color scheme from the activity theme's color attributes instead.
-- **Full player:** when "Content based color" is on, and the device supports it, the player screen still takes its colors from the album art. The selected theme applies everywhere else.
+- **Full player:** when "Content based color" is on, and the device supports it, the player screen still takes its colors from the album art. The selected theme applies everywhere else. Fixed themes are the exception: they turn album-art colors off (`AccentColors.isFixedPalette()`, checked in `FullBottomSheet`).
 - **Not covered:** home screen widgets and the media notification keep their own colors.
+
+### Fixed themes: Black & white, LCD, Dracula
+
+These three are hand-picked palettes rather than generated from a seed color. They live in `res/values/themes_fixed_presets.xml`, which is **not** generated and can be edited directly.
+
+- **Black & white** (`black_white`): pure black background and surfaces, white text, icons and controls. Always dark.
+- **LCD** (`lcd`): grey-green background (`#C4CCB3`) with dark grey text (`#1E211A`), like an old monochrome LCD screen. Selected items use a dark bar with light text. Always light.
+- **Dracula** (`dracula`): the [Dracula](https://draculatheme.com) palette, with a `#282A36` background, `#F8F8F2` text and purple, pink and cyan accents. Always dark.
+
+Each one has only one set of colors, so its `Preset.nightMode` forces the activity into dark or light mode. `BaseActivity` and `BaseComposeActivity` set it as the AppCompat local night mode in `attachBaseContext()`, so the app's Light/Dark/System setting is ignored while one of these themes is selected. The overlays also set `android:textColorPrimary`, `textColorSecondary` and `textColorTertiary`, because parts of the app (the seek bar, for example) use those instead of the Material color roles.
+
+**Player control colors.** A theme can also set optional player-only colors, declared in `res/values/attrs_player_accents.xml`:
+
+| Attribute | Colors |
+|---|---|
+| `playerPlayButtonColor`, `playerOnPlayButtonColor` | Play button background and icon |
+| `playerIconColor` | Previous/next and the other player icons |
+| `playerToggleOnColor`, `playerToggleOffColor` | Repeat/shuffle when on and off |
+
+- **How they're read:** `FullBottomSheet.applyColorScheme()` reads them with `AccentColors.playerColor()` and passes them on to the compact player.
+- **Default:** anything a theme doesn't set keeps the normal Material color.
+- **Only Dracula sets them so far:** green play button, cyan icons, and green repeat/shuffle when on (comment blue when off).
+- **Why separate attributes:** these icons otherwise use `colorOnSurface`, the same color as all the app's text, so the player can't be colored through the normal color roles.
+
+To add another fixed theme, add a style to `themes_fixed_presets.xml` with the same attributes as the existing ones, then add a `Preset` with a `nightMode` in `AccentColors.kt` and a name string.
 
 ### Regenerating the palettes
 
@@ -182,12 +207,76 @@ To add or change a theme, edit the seed colors in `Gen.java`, add the matching e
 | `app/src/main/java/org/akanework/gramophone/ui/components/AccentColorPreference.kt` | **New.** The "Color theme" setting and its swatch menu dialog. |
 | `app/src/main/res/values/themes_accent_presets.xml` | **New, generated.** One theme overlay per color. |
 | `app/src/main/res/values/colors_accent_presets.xml`, `values-night/colors_accent_presets.xml` | **New, generated.** Light and dark colors for each theme. |
+| `app/src/main/res/values/themes_fixed_presets.xml` | **New, hand-written.** The Black & white, LCD and Dracula overlays. |
+| `app/src/main/res/values/attrs_player_accents.xml` | **New.** Optional player control color attributes for themes. |
 | `app/src/main/res/layout/item_accent_color.xml`, `preference_accent_swatch.xml`, `drawable/accent_swatch.xml` | **New.** The swatch menu row and the swatch shown in settings. |
 | `misc/accent_color_generator/Gen.java` | **New.** The palette generator. |
-| `app/src/main/java/org/akanework/gramophone/logic/ui/BaseActivity.kt` | Applies the theme and recreates the activity on change. |
+| `app/src/main/java/org/akanework/gramophone/logic/ui/BaseActivity.kt` | Applies the theme (and a fixed theme's night mode) and recreates the activity on change. |
 | `app/src/main/java/org/akanework/gramophone/ui/Compose.kt` | `BaseComposeActivity` applies the theme; `GramophoneTheme` uses the theme's colors when one is selected. |
 | `app/src/main/res/xml/settings_appearance.xml` | The "Color theme" entry. |
 | `app/src/main/res/values/strings.xml` | Color names. |
+
+## Also in this change: app-wide fonts
+
+**Settings → Appearance → "Font"** (`app_font`), right under Color theme. The menu shows each font name in that font, and the settings entry shows an "Aa" sample in the current font.
+
+- **Device default** (`system`): the old behavior, and the default.
+- **Built-in fonts:** Atkinson Hyperlegible, Nunito, Space Grotesk, JetBrains Mono, Pixelify Sans (pixel) and VT323 (terminal). They're bundled in `res/font/` as static Regular (400) and Bold (700) TTFs; VT323 only has Regular. Other weights use the closest one, and Android fakes bold where needed. All six are under the SIL Open Font License, and their license files are in `misc/font_licenses/`. The TTFs were downloaded from Google Fonts unmodified.
+- **Imported fonts:** the last menu entry, "Import font file…", opens the system file picker. The chosen file is copied into the app's private storage (`filesDir/fonts/`) and listed in the menu by file name, with an X button to remove it again. The file must parse as a font (`Typeface.Builder` on Android 8+, `Typeface.createFromFile` before that) and be at most 32MB. The picker accepts any file type, because font files don't have a reliable MIME type across devices. Removing a font only deletes the app's copy. If the selected font is removed, the app switches back to Device default.
+- **Missing characters** (CJK titles in a pixel font, for example) fall back to the system font automatically.
+
+### How it's applied
+
+A theme overlay can't point at a file on disk, so fonts don't use theme overlays the way colors do. Instead `AppFonts.typeface()` returns the selected `Typeface` (cached per setting value, `null` for Device default), and it's applied in these places:
+
+- **`ViewCompatInflater`** (the app's existing custom view inflater, set with `viewInflaterClass` in the theme). After it applies `textFontWeight`, it calls `AppFonts.applyTo()` on every inflated `TextView`, keeping that view's weight and italic style. This covers the 61 `android:fontFamily="sans-serif"` attributes in upstream layouts without editing them. `TypefaceCompatTextView.setTextAppearance()` re-applies it, because tabs and other views change their text appearance after inflation.
+- **Toolbar titles:** `Toolbar` creates its title views itself, so the inflater adds a hierarchy listener to toolbars and sets the font on title views when they're added.
+- **Collapsing toolbar titles:** these are drawn by `CollapsingToolbarLayout`, which gets the font through `setCollapsedTitleTypeface` and `setExpandedTitleTypeface`.
+- **Fonts set in code:** the bold title switch in `FullBottomSheet` and both lyrics views used `TypefaceCompat.create(context, null, weight, false)`. They now use `AppFonts.create(context, weight)`.
+- **Compose:** `GramophoneTheme` passes a Material 3 `Typography` with every style in the app font.
+- **Changing the font** recreates open activities (`BaseActivity`), the same as Color theme.
+- **Not covered:** home screen widgets and the media notification (RemoteViews can't use custom fonts), and any text view created in code that isn't one of the cases above.
+
+| File | Change |
+|---|---|
+| `app/src/main/java/org/akanework/gramophone/logic/ui/AppFonts.kt` | **New.** Built-in font list, loading and caching, applying a font while keeping the weight, and importing and removing font files. |
+| `app/src/main/java/org/akanework/gramophone/ui/components/FontPreference.kt` | **New.** The "Font" setting and its menu. |
+| `app/src/main/res/font/` | **New.** The built-in TTFs and a `font_<name>.xml` family file for each. |
+| `misc/font_licenses/` | **New.** OFL license file for each built-in font. |
+| `app/src/main/res/layout/item_app_font.xml`, `preference_font_preview.xml` | **New.** The font menu row and the sample shown in settings. |
+| `app/src/main/java/org/akanework/gramophone/logic/ui/ViewCompatInflater.kt` | Applies the font to inflated text views, toolbars and collapsing toolbars. |
+| `FullBottomSheet.kt`, `NewLyricsView.kt`, `LegacyLyricsAdapter.kt` | Use `AppFonts.create()` where they built typefaces in code. |
+| `ui/Compose.kt` | App font `Typography` in `GramophoneTheme`. |
+| `ui/fragments/settings/AppearanceSettingsFragment.kt` | The file picker for importing fonts. |
+
+To add a built-in font, put its Regular and Bold TTFs in `res/font/` as `<name>_400.ttf` and `<name>_700.ttf`, add a `font_<name>.xml` family file like the existing ones, add a `Preset` in `AppFonts.kt` and a name string, and add its license to `misc/font_licenses/`.
+
+## Also in this change: game controller buttons
+
+For handhelds with built-in gamepads. While the app is open, controller buttons can play/pause, go to the previous track and go to the next track. By default these are **Start**, **L1** and **R1**. They work on every screen of the main window, whichever view has focus.
+
+- **Settings:** **Settings → Behavior → Game controller**:
+  - **"Controller playback buttons"** (`controller_buttons`) turns the feature on or off. It's on by default.
+  - Below it is a list with one row per action (Play/pause, Previous track, Next track). Each row shows its current button and an edit icon. The rows are disabled while the switch is off.
+- **Changing a button:** tap a row to open a popup showing the current button.
+  - **Set** removes the current button immediately, then waits for a button press. The next button pressed (on key down, repeats ignored) takes over the action. If another action used that button, it loses it and is left without a button, and a toast says so.
+  - **Cancel** stops waiting. The action stays without a button until one is set.
+  - **Default** puts back the action's default button.
+  - Back, Home, Power, app switch and the volume keys can't be bound. Back still cancels the popup, and volume keeps working.
+- **Prefs:** `controller_key_play_pause`, `controller_key_previous` and `controller_key_next` are ints holding Android key codes, with `KEYCODE_UNKNOWN` (0) meaning no button. Button names come from `ControllerButtons.keyName()`: gamepad buttons get short names (A, B, X, Y, L1, R1, L2, R2, L3, R3, Start, Select), and any other key uses its Android key name.
+- **How it works:** `MainActivity.dispatchKeyEvent()` passes every key event to `ControllerButtons.handle()` first. If the key is bound to an action, it runs the action once on key down and swallows the key up and repeats, so nothing else reacts to that button. Previous uses `seekToPrevious()`, the same as the on-screen previous button, so it restarts the current track if it's a few seconds in, and it follows the "Always skip to previous" setting.
+- **Limits:**
+  - Bound buttons only work while the app is in the foreground, and only in the main window (not in settings, or while a dialog is open).
+  - Binding a D-pad or A button takes it away from normal navigation in the main window. To fix that, rebind it or turn the feature off.
+  - On some handhelds the B button reaches the app as Back, so it can't be bound there.
+
+| File | Change |
+|---|---|
+| `app/src/main/java/org/akanework/gramophone/logic/ui/ControllerButtons.kt` | **New.** The actions with their default buttons and pref keys, button names, and key handling. |
+| `app/src/main/java/org/akanework/gramophone/ui/components/ControllerButtonPreference.kt` | **New.** One action row in settings and the popup for changing its button. |
+| `app/src/main/res/layout/preference_controller_edit.xml` | **New.** The edit icon on each row. |
+| `app/src/main/java/org/akanework/gramophone/ui/MainActivity.kt` | `dispatchKeyEvent()` hook. |
+| `app/src/main/res/xml/settings_behavior.xml` | The "Game controller" category: the switch and the three action rows. |
 
 ## Building
 
@@ -239,7 +328,8 @@ So it can't be confused with, or collide with, the official app, this fork uses 
 - **Hidden player still does work.** In compact mode the regular player keeps updating and animating (seek bar, marquee text) without being drawn. The cost should be small, but it isn't zero.
 - **English only.** The new strings are English only.
 - **No automatic switching.** The layout doesn't change automatically based on screen shape; it's chosen with the setting and the switch button.
-- **No controller button support.** Play/pause and next/previous on gamepad buttons were looked at but deliberately left out of this change.
+- **Controller buttons on other devices.** The defaults (Start, L1, R1) use the standard Android gamepad key codes. Some handhelds send different codes, so check the defaults on each device. Buttons can be rebound in settings.
+- **Fonts with unusual sizes.** Wide or tall fonts (VT323, Pixelify Sans, imported fonts) can overflow tight rows, especially in the compact player. Check the compact layouts with each font.
 
 ---
 

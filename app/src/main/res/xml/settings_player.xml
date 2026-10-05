@@ -89,6 +89,36 @@
 
     <PreferenceCategory
         android:layout="@layout/preference_category_md"
+        android:title="@string/settings_category_compact_player">
+
+        <SwitchPreferenceCompat
+            android:defaultValue="false"
+            android:icon="@drawable/ic_player_layout"
+            android:key="compact_player_default"
+            android:layout="@layout/preference_switch"
+            android:summary="@string/settings_compact_player_summary"
+            android:title="@string/settings_compact_player"
+            android:widgetLayout="@layout/preference_switch_widget" />
+
+        <DropDownPreference
+            android:defaultValue="large"
+            android:entries="@array/compact_cover_size"
+            android:entryValues="@array/compact_cover_size_val"
+            android:key="compact_cover_size"
+            android:layout="@layout/preference_dropdown_md"
+            android:title="@string/settings_compact_cover_size"
+            app:iconSpaceReserved="false"
+            app:useSimpleSummaryProvider="true" />
+
+        <Preference
+            android:icon="@drawable/ic_info"
+            android:layout="@layout/preference_basic"
+            android:summary="@string/settings_compact_player_shared_desc" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:layout="@layout/preference_category_md"
         android:title="@string/settings_category_misc">
 
         <Preference

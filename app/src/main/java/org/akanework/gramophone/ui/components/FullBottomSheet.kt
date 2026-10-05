@@ -24,6 +24,7 @@ import android.content.DialogInterface
 import android.content.SharedPreferences
 import android.content.res.ColorStateList
 import android.content.res.Configuration
+import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.ColorDrawable
@@ -271,9 +272,36 @@ class FullBottomSheet
     val bottomSheetFullLyricView: LyricsView by lazy { (parent as ViewGroup).findViewById(R.id.lyric_frame)!! }
     private val progressDrawable: SquigglyProgress
     private var pqs: PlaylistQueueSheet? = null
+    private val compactPlayer: CompactPlayerView
+
+    /**
+     * When true, [compactPlayer] covers this view. The regular player views stay laid out and keep
+     * receiving updates (so swapping back is instant), they are just not drawn or focusable.
+     */
+    var compactMode = false
+        set(value) {
+            if (field != value) {
+                field = value
+                compactPlayer.isVisible = value
+                // Don't leave keyboard/d-pad focus on a view that is now hidden.
+                if (value && compactPlayer.findFocus() == null) findFocus()?.clearFocus()
+                invalidate()
+            }
+        }
 
     init {
         inflate(context, R.layout.full_player, this)
+        compactPlayer = CompactPlayerView(context, null).also {
+            it.visibility = GONE
+            // Elevated children (like the cover card) would otherwise receive touches first.
+            it.translationZ = 100f
+            addView(it, LayoutParams(LayoutParams.MATCH_CONSTRAINT, LayoutParams.MATCH_CONSTRAINT).apply {
+                startToStart = LayoutParams.PARENT_ID
+                endToEnd = LayoutParams.PARENT_ID
+                topToTop = LayoutParams.PARENT_ID
+                bottomToBottom = LayoutParams.PARENT_ID
+            })
+        }
         bottomSheetFullCoverFrame = findViewById(R.id.album_cover_frame)
         bottomSheetFullCover = findViewById(R.id.full_sheet_cover)
         bottomSheetFullTitle = findViewById(R.id.full_song_name)
@@ -294,6 +322,13 @@ class FullBottomSheet
         bottomSheetPlaylistButton = findViewById(R.id.playlist)
         bottomSheetLyricButton = findViewById(R.id.lyrics)
         bottomSheetFullQualityDetails = findViewById(R.id.quality_details)
+        findViewById<MaterialButton>(R.id.switch_layout).setOnClickListener {
+            ViewCompat.performHapticFeedback(it, HapticFeedbackConstantsCompat.CONTEXT_CLICK)
+            compactMode = true
+        }
+        compactPlayer.onCollapse = { minimize?.invoke() }
+        compactPlayer.onShowQueue = { bottomSheetPlaylistButton.performClick() }
+        compactPlayer.onSwitchLayout = { compactMode = false }
         refreshSettings(null)
         prefs.registerOnSharedPreferenceChangeListener(this)
         activity.controllerViewModel.customCommandListeners.addCallback(activity.lifecycle) { _, command, _ ->
@@ -629,6 +664,7 @@ class FullBottomSheet
         return Bundle().apply {
             putParcelable("Super", super.onSaveInstanceState())
             putBoolean("Lyrics", bottomSheetFullLyricView.isVisible)
+            putBoolean("Compact", compactMode)
         }
     }
 
@@ -636,6 +672,7 @@ class FullBottomSheet
         state as Bundle?
         if (state != null) {
             bottomSheetFullLyricView.isVisible = state.getBoolean("Lyrics")
+            compactMode = state.getBoolean("Compact", compactMode)
             super.onRestoreInstanceState(BundleCompat.getParcelable(state, "Super", AbsSavedState::class.java))
         } else {
             super.onRestoreInstanceState(null)
@@ -707,6 +744,9 @@ class FullBottomSheet
                 "album_round_corner",
                 context.resources.getInteger(R.integer.round_corner_radius)
             ).dpToPx(context).toFloat()
+        }
+        if (key == null || key == "compact_player_default") {
+            compactMode = prefs.getBooleanStrict("compact_player_default", false)
         }
         if (key == null || key == "cookie_cover") {
             bottomSheetFullCover.setClip(prefs.getBooleanStrict("cookie_cover", false))
@@ -1406,6 +1446,17 @@ class FullBottomSheet
             bottomSheetFullDuration.setTextColor(
                 colorOnSurfaceVariant
             )
+
+            compactPlayer.applyColors(
+                colorPrimary,
+                colorSecondary,
+                colorOnSurface,
+                colorOnSurfaceVariant,
+                colorSecondaryContainer,
+                colorOnSecondaryContainer,
+                colorContrastFainted,
+                selectorBackground
+            )
         }
     }
 
@@ -1568,6 +1619,27 @@ class FullBottomSheet
             if (!isUserTracking) {
                 progressDrawable.animate = false
             }
+        }
+    }
+
+    override fun drawChild(canvas: Canvas, child: View, drawingTime: Long): Boolean {
+        if (compactMode && child !== compactPlayer) return false
+        return super.drawChild(canvas, child, drawingTime)
+    }
+
+    override fun addFocusables(views: ArrayList<View>, direction: Int, focusableMode: Int) {
+        if (compactMode) {
+            compactPlayer.addFocusables(views, direction, focusableMode)
+        } else {
+            super.addFocusables(views, direction, focusableMode)
+        }
+    }
+
+    override fun addChildrenForAccessibility(outChildren: ArrayList<View>) {
+        if (compactMode) {
+            outChildren.add(compactPlayer)
+        } else {
+            super.addChildrenForAccessibility(outChildren)
         }
     }
 

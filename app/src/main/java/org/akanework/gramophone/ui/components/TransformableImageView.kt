@@ -8,7 +8,6 @@ import android.util.AttributeSet
 import android.view.Choreographer
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.graphics.PathParser
-import androidx.core.view.doOnLayout
 
 class TransformableImageView @JvmOverloads constructor(
     context: Context,
@@ -27,22 +26,28 @@ class TransformableImageView @JvmOverloads constructor(
     private var vw = 0f
     private var vh = 0f
 
-    init {
-        doOnLayout {
-            vw = width.toFloat()
-            vh = height.toFloat()
+    // Recompute on every size change (not just the first layout), otherwise the clip path keeps
+    // its old size when the view is resized, e.g. by the compact player's album art size setting.
+    override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
+        super.onSizeChanged(w, h, oldw, oldh)
+        vw = w.toFloat()
+        vh = h.toFloat()
+        updatePath()
+        invalidate()
+    }
 
-            val vbw = 370f
-            val vbh = 370f
-            val scaleX = vw / vbw
-            val scaleY = vh / vbh
+    private fun updatePath() {
+        val vbw = 370f
+        val vbh = 370f
+        val scaleX = vw / vbw
+        val scaleY = vh / vbh
 
-            matrix.reset()
-            matrix.setScale(scaleX, scaleY)
+        matrix.reset()
+        matrix.setScale(scaleX, scaleY)
+        matrix.postRotate(rotationAngle, vw / 2f, vh / 2f)
 
-            path.reset()
-            originalPath.transform(matrix, path)
-        }
+        path.reset()
+        originalPath.transform(matrix, path)
     }
 
     fun setClip(state: Boolean) {
@@ -95,19 +100,7 @@ class TransformableImageView @JvmOverloads constructor(
                 if (rotationAngle >= 360f) rotationAngle -= 360f
                 lastFrameTimeNanos = frameTimeNanos
 
-                val vbw = 370f
-                val vbh = 370f
-                val scaleX = vw / vbw
-                val scaleY = vh / vbh
-                val centerX = vw / 2f
-                val centerY = vh / 2f
-
-                matrix.reset()
-                matrix.setScale(scaleX, scaleY)
-                matrix.postRotate(rotationAngle, centerX, centerY)
-
-                path.reset()
-                originalPath.transform(matrix, path)
+                updatePath()
 
                 invalidate()
             }

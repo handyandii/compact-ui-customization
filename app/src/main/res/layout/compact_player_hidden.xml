@@ -1,0 +1,340 @@
+<?xml version="1.0" encoding="utf-8"?><!-- Compact player, "Hidden" album art: no cover, large centered controls.
+     Sizes are the base sizes for a ~640x400dp screen, CompactPlayerView scales the views
+     tagged as scalable (cover, title/artist, transport and action buttons) to the actual screen. -->
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:parentTag="androidx.constraintlayout.widget.ConstraintLayout">
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/compact_cover_frame"
+        android:layout_width="140dp"
+        android:layout_height="140dp"
+        app:layout_constraintBottom_toTopOf="@id/compact_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="spread"
+        android:visibility="gone"
+        app:cardBackgroundColor="@android:color/transparent"
+        app:cardCornerRadius="16dp"
+        app:strokeWidth="0dp">
+
+        <org.akanework.gramophone.ui.components.TransformableImageView
+            android:id="@+id/compact_cover"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:contentDescription="@string/dialog_album"
+            android:scaleType="centerCrop"
+            app:srcCompat="@drawable/ic_default_cover" />
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- Vertical chain (spread) of text, seek and play, filling the space above the bottom row. -->
+    <LinearLayout
+        android:id="@+id/compact_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:layout_marginHorizontal="56dp"
+        app:layout_constraintBottom_toTopOf="@id/compact_seek_group"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/compact_cover_frame">
+
+        <org.akanework.gramophone.ui.components.MarqueeTextView
+            android:id="@+id/compact_song_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:gravity="center"
+            android:scrollbars="none"
+            android:textColor="?colorPrimary"
+            android:textSize="30sp"
+            app:textFontWeight="500"
+            tools:text="1961" />
+
+        <org.akanework.gramophone.ui.components.MarqueeTextView
+            android:id="@+id/compact_song_artist"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:fontFamily="sans-serif"
+            android:gravity="center"
+            android:scrollbars="none"
+            android:textColor="?colorSecondary"
+            android:textSize="22sp"
+            app:textFontWeight="500"
+            tools:text="The Fray" />
+
+    </LinearLayout>
+
+    <!-- Progress bar + times. Only one of the two bars is visible, picked by the
+         "default_progress_bar" setting (off = squiggly line, on = material slider). -->
+    <LinearLayout
+        android:id="@+id/compact_seek_group"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginHorizontal="56dp"
+        app:layout_constraintBottom_toTopOf="@id/compact_play"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/compact_text">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <!-- min/maxHeight needed for Android L to center SeekBar thumb -->
+            <SeekBar
+                android:id="@+id/compact_slider_squiggly"
+                style="@style/MediaPlayer.ProgressBar"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:contentDescription="@string/position_slider"
+                android:maxHeight="40dp"
+                android:minHeight="40dp"
+                android:progress="0"
+                android:thumbTint="?attr/colorPrimary"
+                android:visibility="gone"
+                tools:ignore="DuplicateClickableBoundsCheck"
+                tools:progress="20"
+                tools:visibility="visible" />
+
+            <com.google.android.material.slider.Slider
+                android:id="@+id/compact_slider"
+                style="@style/Widget.Material3.Slider.Legacy"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:contentDescription="@string/position_slider"
+                android:value="0"
+                android:valueTo="1"
+                app:labelBehavior="gone"
+                app:thumbElevation="0dp"
+                app:thumbHeight="16dp"
+                app:thumbWidth="16dp"
+                app:trackHeight="4dp"
+                tools:value="0.5" />
+
+        </FrameLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="12dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/compact_position"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="sans-serif"
+                android:gravity="start"
+                android:text="@string/default_time"
+                android:textColor="?colorOnSurfaceVariant"
+                android:textSize="14sp"
+                app:textFontWeight="600" />
+
+            <TextView
+                android:id="@+id/compact_duration"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="sans-serif"
+                android:gravity="end"
+                android:text="@string/default_time"
+                android:textColor="?colorOnSurfaceVariant"
+                android:textSize="14sp"
+                app:textFontWeight="600" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/compact_play"
+        android:layout_width="104dp"
+        android:layout_height="104dp"
+        android:contentDescription="@string/play"
+        android:insetLeft="0dp"
+        android:insetTop="0dp"
+        android:insetRight="0dp"
+        android:insetBottom="0dp"
+        app:backgroundTint="?attr/colorSecondaryContainer"
+        app:cornerRadius="52dp"
+        app:icon="@drawable/ic_play_arrow_filled"
+        app:iconGravity="textStart"
+        app:iconPadding="0dp"
+        app:iconSize="52dp"
+        app:iconTint="?attr/colorOnSecondaryContainer"
+        app:layout_constraintBottom_toTopOf="@id/compact_loop"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/compact_seek_group"
+        app:tooltipText="@string/play" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/compact_previous"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        android:layout_marginEnd="24dp"
+        android:background="@drawable/rp_buttons_dynamic"
+        android:contentDescription="@string/skip_previous"
+        android:insetLeft="0dp"
+        android:insetTop="0dp"
+        android:insetRight="0dp"
+        android:insetBottom="0dp"
+        app:icon="@drawable/ic_skip_previous"
+        app:iconGravity="textStart"
+        app:iconPadding="0dp"
+        app:iconSize="40dp"
+        app:iconTint="?attr/colorOnSurface"
+        app:layout_constraintBottom_toBottomOf="@id/compact_play"
+        app:layout_constraintEnd_toStartOf="@id/compact_play"
+        app:layout_constraintTop_toTopOf="@id/compact_play"
+        app:tooltipText="@string/skip_previous" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/compact_next"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        android:layout_marginStart="24dp"
+        android:background="@drawable/rp_buttons_dynamic"
+        android:contentDescription="@string/skip_next"
+        android:insetLeft="0dp"
+        android:insetTop="0dp"
+        android:insetRight="0dp"
+        android:insetBottom="0dp"
+        app:icon="@drawable/ic_skip_next"
+        app:iconGravity="textStart"
+        app:iconPadding="0dp"
+        app:iconSize="40dp"
+        app:iconTint="?attr/colorOnSurface"
+        app:layout_constraintBottom_toBottomOf="@id/compact_play"
+        app:layout_constraintStart_toEndOf="@id/compact_play"
+        app:layout_constraintTop_toTopOf="@id/compact_play"
+        app:tooltipText="@string/skip_next" />
+
+    <!-- Bottom row: repeat / shuffle / queue centered, close and switch layout in the corners. -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/compact_loop"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:background="@drawable/rp_buttons"
+        android:contentDescription="@string/repeat_mode"
+        android:insetLeft="0dp"
+        android:insetTop="0dp"
+        android:insetRight="0dp"
+        android:insetBottom="0dp"
+        android:checkable="true"
+        android:saveEnabled="false"
+        app:toggleCheckedStateOnClick="false"
+        app:icon="@drawable/ic_repeat"
+        app:iconGravity="textStart"
+        app:iconPadding="0dp"
+        app:iconSize="32dp"
+        app:iconTint="@color/sl_check_button"
+        android:layout_marginBottom="4dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/compact_shuffle"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:tooltipText="@string/repeat_mode" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/compact_shuffle"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:background="@drawable/rp_buttons"
+        android:contentDescription="@string/shuffle"
+        android:insetLeft="0dp"
+        android:insetTop="0dp"
+        android:insetRight="0dp"
+        android:insetBottom="0dp"
+        android:checkable="true"
+        android:saveEnabled="false"
+        app:toggleCheckedStateOnClick="false"
+        app:icon="@drawable/ic_shuffle"
+        app:iconGravity="textStart"
+        app:iconPadding="0dp"
+        app:iconSize="32dp"
+        app:iconTint="@color/sl_check_button"
+        android:layout_marginStart="76dp"
+        app:layout_constraintBottom_toBottomOf="@id/compact_loop"
+        app:layout_constraintEnd_toStartOf="@id/compact_playlist"
+        app:layout_constraintStart_toEndOf="@id/compact_loop"
+        app:layout_constraintTop_toTopOf="@id/compact_loop"
+        app:tooltipText="@string/shuffle" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/compact_playlist"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:background="@drawable/rp_buttons"
+        android:contentDescription="@string/current_playlist"
+        android:insetLeft="0dp"
+        android:insetTop="0dp"
+        android:insetRight="0dp"
+        android:insetBottom="0dp"
+        app:icon="@drawable/ic_playlist_play"
+        app:iconGravity="textStart"
+        app:iconPadding="0dp"
+        app:iconSize="32dp"
+        app:iconTint="?attr/colorOnSurface"
+        android:layout_marginStart="76dp"
+        app:layout_constraintBottom_toBottomOf="@id/compact_loop"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/compact_shuffle"
+        app:layout_constraintTop_toTopOf="@id/compact_loop"
+        app:tooltipText="@string/current_playlist" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/compact_collapse"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:background="@drawable/rp_buttons"
+        android:contentDescription="@string/expand_less"
+        android:insetLeft="0dp"
+        android:insetTop="0dp"
+        android:insetRight="0dp"
+        android:insetBottom="0dp"
+        app:icon="@drawable/ic_expand_more"
+        app:iconGravity="textStart"
+        app:iconPadding="0dp"
+        app:iconSize="24dp"
+        app:iconTint="?attr/colorOnSurface"
+        android:layout_marginStart="4dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/compact_loop"
+        app:layout_constraintTop_toTopOf="@id/compact_loop"
+        app:tooltipText="@string/expand_less" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/compact_switch_layout"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:background="@drawable/rp_buttons"
+        android:contentDescription="@string/switch_player_layout"
+        android:insetLeft="0dp"
+        android:insetTop="0dp"
+        android:insetRight="0dp"
+        android:insetBottom="0dp"
+        app:icon="@drawable/ic_player_layout"
+        app:iconGravity="textStart"
+        app:iconPadding="0dp"
+        app:iconSize="24dp"
+        app:iconTint="?attr/colorOnSurface"
+        android:layout_marginEnd="4dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/compact_loop"
+        app:layout_constraintTop_toTopOf="@id/compact_loop"
+        app:tooltipText="@string/switch_player_layout" />
+
+</merge>

@@ -101,7 +101,8 @@ android {
     }
 
     defaultConfig {
-        applicationId = appIdOverride ?: "org.akanework.gramophone"
+        // Fork: own application ID so it installs next to (and never collides with) official Gramophone.
+        applicationId = appIdOverride ?: "io.github.handyandii.compactgramophone"
         minSdk = 23
         targetSdk = 37
         versionCode = 24
@@ -274,7 +275,7 @@ kotlin {
 }
 
 base {
-    archivesName = "Gramophone-${android.defaultConfig.versionName}${android.defaultConfig.versionNameSuffix ?: ""}"
+    archivesName = "CustomCompactGramophone-${android.defaultConfig.versionName}${android.defaultConfig.versionNameSuffix ?: ""}"
 }
 
 baselineProfile {

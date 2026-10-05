@@ -33,6 +33,9 @@ open class BaseActivity : AppCompatActivity() {
         ) {
             recreate()
         }
+        if (key == AccentColors.PREF_KEY) {
+            recreate()
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,6 +46,7 @@ open class BaseActivity : AppCompatActivity() {
         ) {
             setTheme(R.style.Theme_Gramophone_PureDark)
         }
+        AccentColors.applyTo(theme, resources, prefs)
         prefs.registerOnSharedPreferenceChangeListener(listener)
         super.onCreate(savedInstanceState)
     }

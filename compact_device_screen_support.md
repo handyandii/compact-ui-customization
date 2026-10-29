@@ -373,15 +373,15 @@ Controller navigation outside the home menu needed a few fixes, since most of th
 | `app/src/main/java/org/akanework/gramophone/ui/components/PlayerFocusColors.kt` | **New.** Focus shown by color in the player. |
 | `app/src/main/res/values/attrs_player_accents.xml`, `themes_fixed_presets.xml`, `themes_accent_presets.xml` (generated), `misc/accent_color_generator/Gen.java` | `playerFocusColor`/`playerOnFocusColor` for every theme. |
 
-## Also in this change: hide navigation bar
+## Also in this change: full screen
 
-**Settings → Appearance → "Hide navigation bar"** (`hide_navigation_bar`, boolean, off by default) hides Android's navigation bar (back/home/recents) in immersive mode, for more screen space on small handhelds. A swipe from the screen edge shows it for a moment (`BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE`). The status bar stays. `logic/ui/SystemBars.kt` applies it from `BaseActivity` (after `onCreate`, whenever the window regains focus, since dialogs and the system can bring the bar back, and when the setting changes), so it covers the main screen and all settings pages. The app is already edge-to-edge and pads by the current insets, so layouts use the freed space. The Compose pages (Contributors, Open source licenses) don't apply it.
+**Settings → Appearance → "Full screen"** (`full_screen`, boolean, off by default) hides Android's status bar and navigation bar in immersive mode, for more screen space on small handhelds. A swipe from the top or bottom edge shows them for a moment (`BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE`). It hides both because with gesture navigation (the ARBOR's setting) the navigation bar is only a thin handle, and the status bar is what takes the space; hiding only the navigation bar looked like it did nothing. `logic/ui/SystemBars.kt` applies it from `BaseActivity` (after `onCreate`, whenever the window regains focus, since dialogs and the system can bring the bar back, and when the setting changes), so it covers the main screen and all settings pages. The app is already edge-to-edge and pads by the current insets, so layouts use the freed space. The Compose pages (Contributors, Open source licenses) don't apply it.
 
 | File | Change |
 |---|---|
-| `app/src/main/java/org/akanework/gramophone/logic/ui/SystemBars.kt` | **New.** Shows or hides the navigation bar. |
+| `app/src/main/java/org/akanework/gramophone/logic/ui/SystemBars.kt` | **New.** Shows or hides the system bars. |
 | `app/src/main/java/org/akanework/gramophone/logic/ui/BaseActivity.kt` | Applies it on create, on window focus and on setting change. |
-| `app/src/main/res/xml/settings_appearance.xml` | The "Hide navigation bar" switch. |
+| `app/src/main/res/xml/settings_appearance.xml` | The "Full screen" switch. |
 
 ## Known limitations and things to check
 

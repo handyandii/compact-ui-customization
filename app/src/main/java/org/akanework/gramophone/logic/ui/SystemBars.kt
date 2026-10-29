@@ -25,22 +25,24 @@ import androidx.core.view.WindowInsetsControllerCompat
 import org.akanework.gramophone.logic.getBooleanStrict
 
 /**
- * "Hide navigation bar" setting: hides Android's navigation bar (back/home/recents) in immersive
- * mode, for more screen space on small handhelds. A swipe from the screen edge shows it for a
- * moment. Applied by BaseActivity to every activity, and again whenever the window regains focus,
- * since dialogs and the system can bring the bar back.
+ * "Full screen" setting: hides Android's status bar and navigation bar (immersive mode), for more
+ * screen space on small handhelds. A swipe from the top or bottom edge shows them for a moment.
+ * Both bars, because with gesture navigation (as on the ARBOR) the navigation bar is only a thin
+ * handle and the status bar is the bar that takes the space. Applied by BaseActivity to every
+ * activity, and again whenever the window regains focus, since dialogs and the system can bring
+ * the bars back.
  */
 object SystemBars {
-    const val PREF_KEY = "hide_navigation_bar"
+    const val PREF_KEY = "full_screen"
 
     fun apply(activity: Activity, prefs: SharedPreferences) {
         val controller = WindowCompat.getInsetsController(activity.window, activity.window.decorView)
         if (prefs.getBooleanStrict(PREF_KEY, false)) {
             controller.systemBarsBehavior =
                 WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-            controller.hide(WindowInsetsCompat.Type.navigationBars())
+            controller.hide(WindowInsetsCompat.Type.systemBars())
         } else {
-            controller.show(WindowInsetsCompat.Type.navigationBars())
+            controller.show(WindowInsetsCompat.Type.systemBars())
         }
     }
 }

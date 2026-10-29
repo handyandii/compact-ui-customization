@@ -1380,9 +1380,9 @@ supporting local search. This string is displayed in the search bar when using G
     <string name="controller_action_next">Next track</string>
     <!-- Controller action: compact/full player when the player is open, home menu/tabs otherwise -->
     <string name="controller_action_switch_layout">Switch layout</string>
-    <!-- Setting: hide Android's navigation bar (immersive mode) -->
-    <string name="settings_hide_navigation_bar">Hide navigation bar</string>
-    <string name="settings_hide_navigation_bar_summary">Hide the system back, home and recents bar for more space. Swipe in from the edge of the screen to show it for a moment</string>
+    <!-- Setting: hide Android's status bar and navigation bar (immersive mode) -->
+    <string name="settings_full_screen">Full screen</string>
+    <string name="settings_full_screen_summary">Hide the status bar and navigation bar for more space. Swipe in from the top or bottom edge to show them for a moment</string>
     <!-- Setting: outline around the item selected with the D-pad (off = only a light shade) -->
     <string name="settings_focus_high_contrast">High contrast focus</string>
     <string name="settings_focus_high_contrast_summary">Outline the item selected with the D-pad. When off, a light shade marks it</string>

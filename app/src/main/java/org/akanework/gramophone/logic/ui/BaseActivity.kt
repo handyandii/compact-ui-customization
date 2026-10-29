@@ -37,6 +37,9 @@ open class BaseActivity : AppCompatActivity() {
         if (key == AccentColors.PREF_KEY || key == AppFonts.PREF_KEY) {
             recreate()
         }
+        if (key == SystemBars.PREF_KEY) {
+            SystemBars.apply(this, prefs)
+        }
     }
 
     override fun attachBaseContext(newBase: Context) {
@@ -63,6 +66,12 @@ open class BaseActivity : AppCompatActivity() {
         super.onPostCreate(savedInstanceState)
         // After setContentView(), for the main screen and every settings page.
         FocusHighlight.install(this)
+        SystemBars.apply(this, prefs)
+    }
+
+    override fun onWindowFocusChanged(hasFocus: Boolean) {
+        super.onWindowFocusChanged(hasFocus)
+        if (hasFocus) SystemBars.apply(this, prefs)
     }
 
     override fun onDestroy() {

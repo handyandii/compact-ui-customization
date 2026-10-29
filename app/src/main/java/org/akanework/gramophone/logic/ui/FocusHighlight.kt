@@ -18,23 +18,38 @@
 package org.akanework.gramophone.logic.ui
 
 import android.app.Activity
+import android.content.Context
 import android.graphics.drawable.GradientDrawable
+import android.graphics.drawable.RippleDrawable
 import android.view.View
 import androidx.core.graphics.ColorUtils
+import androidx.preference.PreferenceManager
 import com.google.android.material.color.MaterialColors
 import org.akanework.gramophone.R
 import org.akanework.gramophone.logic.dpToPx
+import org.akanework.gramophone.logic.getBooleanStrict
 
 /**
  * Draws an outline on whichever view has D-pad/keyboard focus, so controller navigation can be
  * seen. Most of the app's views (library rows, mini player, toolbar buttons, settings rows) have
- * no visible focused state of their own. Installed for every activity by BaseActivity. Only shown outside touch mode, i.e. after a D-pad or key press, so
- * touch use looks unchanged. Drawn in the focused view's overlay, so no layouts need changing.
+ * no visible focused state of their own. Installed for every activity by BaseActivity. Only shown
+ * outside touch mode, i.e. after a D-pad or key press, so touch use looks unchanged. Drawn in the
+ * focused view's overlay, so no layouts need changing.
+ *
+ * The "High contrast focus" setting ([PREF_HIGH_CONTRAST], off by default) adds the outline. With
+ * it off, only the light shade marks the focused view, and views that already show focus with
+ * their own ripple background or foreground (toolbar buttons, Material buttons) get nothing extra, so they
+ * don't end up with two highlights.
  *
  * Views that draw their own focus state can opt out by setting the [R.id.focus_highlight_skip]
  * tag to true.
  */
 object FocusHighlight {
+    const val PREF_HIGH_CONTRAST = "focus_high_contrast"
+
+    fun highContrast(context: Context): Boolean =
+        PreferenceManager.getDefaultSharedPreferences(context)
+            .getBooleanStrict(PREF_HIGH_CONTRAST, false)
 
     fun install(activity: Activity) {
         val decorView = activity.window.decorView
@@ -42,8 +57,8 @@ object FocusHighlight {
             activity, com.google.android.material.R.attr.colorOnSurface, 0
         )
         val inset = 2.dpToPx(activity)
+        val strokeWidth = 3.dpToPx(activity)
         val outline = GradientDrawable().apply {
-            setStroke(3.dpToPx(activity), color)
             setColor(ColorUtils.setAlphaComponent(color, 0x1F))
             cornerRadius = 12.dpToPx(activity).toFloat()
         }
@@ -61,6 +76,12 @@ object FocusHighlight {
             if (view == null || view.isInTouchMode
                 || view.getTag(R.id.focus_highlight_skip) == true
             ) return
+            // Read each time, so changing the setting applies without restarting.
+            val highContrast = highContrast(view.context)
+            if (!highContrast && (view.background is RippleDrawable
+                        || view.foreground is RippleDrawable)
+            ) return
+            outline.setStroke(if (highContrast) strokeWidth else 0, color)
             outline.setBounds(inset, inset, view.width - inset, view.height - inset)
             view.overlay.add(outline)
             view.addOnLayoutChangeListener(resizeListener)

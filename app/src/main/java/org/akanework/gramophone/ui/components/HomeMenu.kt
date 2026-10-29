@@ -43,6 +43,7 @@ import com.google.android.material.tabs.TabLayout
 import org.akanework.gramophone.R
 import org.akanework.gramophone.logic.enableEdgeToEdgePaddingListener
 import org.akanework.gramophone.logic.getBooleanStrict
+import org.akanework.gramophone.logic.ui.FocusHighlight
 import org.akanework.gramophone.ui.adapters.ViewPager2Adapter
 import org.akanework.gramophone.ui.fragments.ViewPagerFragment
 
@@ -236,11 +237,16 @@ class HomeMenu(
         backCallback.isEnabled = enabled && !menuShown && !fragment.isHidden
     }
 
-    /** The focused tile is filled with the primary color, outlined and slightly enlarged. */
+    /**
+     * The focused tile is filled with the primary color and slightly enlarged, and outlined if
+     * "High contrast focus" is on.
+     */
     private fun styleTile(tile: View, focused: Boolean) {
-        tile.background = AppCompatResources.getDrawable(context,
-            if (focused) R.drawable.home_menu_tile_background_focused
-            else R.drawable.home_menu_tile_background)
+        tile.background = AppCompatResources.getDrawable(context, when {
+            !focused -> R.drawable.home_menu_tile_background
+            FocusHighlight.highContrast(context) -> R.drawable.home_menu_tile_background_focused
+            else -> R.drawable.home_menu_tile_background_focused_subtle
+        })
         val contentColor = MaterialColors.getColor(tile,
             if (focused) com.google.android.material.R.attr.colorOnPrimary
             else com.google.android.material.R.attr.colorOnSecondaryContainer)

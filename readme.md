@@ -34,13 +34,13 @@ Change the app's font in *Settings → Appearance → Font*:
 - **Your own fonts:** import any `.ttf` or `.otf` file from your device. Imported fonts stay in the list until you remove them.
 
 ### Game controller buttons
-On handhelds with built-in controls, **Start** plays and pauses, **L1** goes to the previous track, **R1** to the next one, and **Select** switches layout: between the compact and full player when the now playing screen is open, and between the home menu and the tabs everywhere else on the home screen. In *Settings → Behavior → Game controller* you can turn this off or set a different button for each action: tap the action, tap **Set**, then press the button you want.
+On handhelds with built-in controls, **Start** plays and pauses, **L1** goes to the previous track, **R1** to the next one, **X** opens and closes the now playing screen, and **Select** switches layout: between the compact and full player when the now playing screen is open, and between the home menu and the tabs everywhere else on the home screen. You can also add buttons for **repeat mode** and **shuffle**, which have none by default. In *Settings → Behavior → Game controller* you can turn this off or set a different button for each action: tap the action, tap **Set**, then press the button you want.
 
 ### Home menu
 An optional home screen with four big tiles (**Artists**, **Albums**, **Songs** and **Playlists**) instead of tabs, made for controllers: move with the D-pad, open with **A**, and go back to the tiles with **B**. Make it what the app opens with in *Settings → Appearance → Home screen → Home menu by default*, or switch anytime with **Select** or the home screen's **⋮** menu (**Show home menu** / **Show tabs**).
 
 ### Controller navigation
-The D-pad now shows which item is selected with an outline in the main screen and in settings (the Settings icon is in the top bar, one press up from the list or home menu), moves between whole songs in lists, and **holding A** opens a song's menu. You can also set your own **home screen title** in *Settings → Appearance → Home screen*.
+The D-pad now shows which item is selected: with a shade (or an outline) on the main screen and in settings, and by lighting the control up in your theme's color on the now playing screen (the Settings icon is in the top bar, one press up from the list or home menu), moves between whole songs in lists, and **holding A** opens a song's menu. By default a subtle shade marks the selection; turn on *High contrast focus* (in *Settings → Behavior → Game controller*) for a bold outline. You can also set your own **home screen title** in *Settings → Appearance → Home screen*, and turn on *Settings → Appearance → Hide navigation bar* to hide Android's back/home/recents bar for more screen space (swipe in from the edge to show it briefly).
 
 ### Fixes
 - The cookie-shaped album cover no longer cuts off the image when the cover changes size.

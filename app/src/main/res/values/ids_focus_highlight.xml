@@ -2,4 +2,6 @@
 <resources>
     <!-- View tag key: set to true on views that draw their own focus state (FocusHighlight.kt) -->
     <item name="focus_highlight_skip" type="id" />
+    <!-- View tag key: a now playing control's normal tints while it shows the focus color (PlayerFocusColors.kt) -->
+    <item name="player_focus_saved" type="id" />
 </resources>

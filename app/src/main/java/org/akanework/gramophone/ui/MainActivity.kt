@@ -851,10 +851,23 @@ class MainActivity : BaseActivity() {
         override fun switchLayout() {
             if (playerBottomSheet.visibleAndExpanded) {
                 playerBottomSheet.fullPlayer.compactMode = !playerBottomSheet.fullPlayer.compactMode
+                // Keep D-pad focus on a control of the layout that is now showing.
+                playerBottomSheet.fullPlayer.requestFocus()
             } else {
                 (supportFragmentManager.findFragmentById(R.id.fragment_viewpager)
                         as? ViewPagerFragment)?.takeIf { !it.isHidden }?.toggleHomeMenu()
             }
+        }
+
+        override fun toggleNowPlaying() {
+            if (playerBottomSheet.visibleAndExpanded) playerBottomSheet.fullPlayer.minimize?.invoke()
+            else playerBottomSheet.open()
+        }
+
+        override fun notify(message: Int) {
+            // The open player shows repeat/shuffle itself.
+            if (!playerBottomSheet.visibleAndExpanded)
+                Toast.makeText(this@MainActivity, message, Toast.LENGTH_SHORT).show()
         }
     }
 

@@ -57,6 +57,15 @@
             android:widgetLayout="@layout/preference_switch_widget"
             app:iconSpaceReserved="false" />
 
+        <SwitchPreferenceCompat
+            android:defaultValue="false"
+            android:key="hide_navigation_bar"
+            android:layout="@layout/preference_switch"
+            android:summary="@string/settings_hide_navigation_bar_summary"
+            android:title="@string/settings_hide_navigation_bar"
+            android:widgetLayout="@layout/preference_switch_widget"
+            app:iconSpaceReserved="false" />
+
     </PreferenceCategory>
 
     <PreferenceCategory

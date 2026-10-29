@@ -56,6 +56,9 @@
         <item name="android:textColorSecondary">#FFFFFF</item>
         <item name="android:textColorTertiary">#8AFFFFFF</item>
         <item name="previewPlayerElevation">0dp</item>
+        <!-- Focused player control: inverted, white with a black icon. -->
+        <item name="playerFocusColor">#FFFFFF</item>
+        <item name="playerOnFocusColor">#000000</item>
     </style>
 
     <!-- LCD: grey-green background with dark grey text, like a monochrome LCD. -->
@@ -109,6 +112,9 @@
         <item name="android:textColorPrimary">#1E211A</item>
         <item name="android:textColorSecondary">#3A3E34</item>
         <item name="android:textColorTertiary">#8A1E211A</item>
+        <!-- Focused player control: a half-lit LCD segment (the play button is already the darkest shade). -->
+        <item name="playerFocusColor">#7D8568</item>
+        <item name="playerOnFocusColor">#1E211A</item>
     </style>
 
     <!-- Dracula (draculatheme.com): dark purple-grey background, off-white text, purple/pink/cyan accents. -->
@@ -168,5 +174,8 @@
         <item name="playerIconColor">#8BE9FD</item>
         <item name="playerToggleOnColor">#50FA7B</item>
         <item name="playerToggleOffColor">#6272A4</item>
+        <!-- Focused player control: Dracula pink, apart from the green play button and cyan icons. -->
+        <item name="playerFocusColor">#FF79C6</item>
+        <item name="playerOnFocusColor">#282A36</item>
     </style>
 </resources>

@@ -29,7 +29,8 @@ import org.akanework.gramophone.logic.playOrPause
 /**
  * Game controller buttons (for retro handhelds). Each [Action] is bound to one key code,
  * changeable in settings (ControllerButtonPreference); by default Start plays/pauses, L1 goes to
- * the previous track, R1 to the next one and Select switches layout (see [Host.switchLayout]). Toggled by the "controller_buttons" setting. Called
+ * the previous track, R1 to the next one, X opens/closes now playing and Select switches layout
+ * (see [Host.switchLayout]). Repeat and shuffle have no button until the user sets one. Toggled by the "controller_buttons" setting. Called
  * from MainActivity.dispatchKeyEvent, so it works no matter which view has focus.
  */
 object ControllerButtons {
@@ -44,6 +45,12 @@ object ControllerButtons {
 
         /** Compact ↔ full player if the player is open, otherwise home menu ↔ tabs. */
         fun switchLayout()
+
+        /** Opens the now playing screen, or closes it if it's open. */
+        fun toggleNowPlaying()
+
+        /** Short feedback for actions whose result isn't otherwise visible. */
+        fun notify(@StringRes message: Int)
     }
 
     enum class Action(
@@ -58,8 +65,32 @@ object ControllerButtons {
             R.string.controller_action_previous, { player?.seekToPrevious() }),
         NEXT("controller_key_next", KeyEvent.KEYCODE_BUTTON_R1,
             R.string.controller_action_next, { player?.seekToNext() }),
+        NOW_PLAYING("controller_key_now_playing", KeyEvent.KEYCODE_BUTTON_X,
+            R.string.controller_action_now_playing, { toggleNowPlaying() }),
         SWITCH_LAYOUT("controller_key_switch_layout", KeyEvent.KEYCODE_BUTTON_SELECT,
-            R.string.controller_action_switch_layout, { switchLayout() });
+            R.string.controller_action_switch_layout, { switchLayout() }),
+        REPEAT("controller_key_repeat", UNSET, R.string.controller_action_repeat, {
+            player?.let {
+                // Same order as the player's repeat button.
+                it.repeatMode = when (it.repeatMode) {
+                    Player.REPEAT_MODE_OFF -> Player.REPEAT_MODE_ALL
+                    Player.REPEAT_MODE_ALL -> Player.REPEAT_MODE_ONE
+                    else -> Player.REPEAT_MODE_OFF
+                }
+                notify(when (it.repeatMode) {
+                    Player.REPEAT_MODE_ALL -> R.string.controller_repeat_all
+                    Player.REPEAT_MODE_ONE -> R.string.controller_repeat_one
+                    else -> R.string.controller_repeat_off
+                })
+            }
+        }),
+        SHUFFLE("controller_key_shuffle", UNSET, R.string.controller_action_shuffle, {
+            player?.let {
+                it.shuffleModeEnabled = !it.shuffleModeEnabled
+                notify(if (it.shuffleModeEnabled) R.string.controller_shuffle_on
+                    else R.string.controller_shuffle_off)
+            }
+        });
 
         fun keyCode(prefs: SharedPreferences): Int = prefs.getIntStrict(prefKey, defaultKeyCode)
 

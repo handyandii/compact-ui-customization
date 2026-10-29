@@ -26,6 +26,7 @@ import android.content.res.ColorStateList
 import android.content.res.Configuration
 import android.graphics.Canvas
 import android.graphics.Color
+import android.graphics.Rect
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
@@ -279,6 +280,8 @@ class FullBottomSheet
      * When true, [compactPlayer] covers this view. The regular player views stay laid out and keep
      * receiving updates (so swapping back is instant), they are just not drawn or focusable.
      */
+    private val focusColors = PlayerFocusColors(context)
+
     var compactMode = false
         set(value) {
             if (field != value) {
@@ -330,6 +333,9 @@ class FullBottomSheet
         compactPlayer.onCollapse = { minimize?.invoke() }
         compactPlayer.onShowQueue = { bottomSheetPlaylistButton.performClick() }
         compactPlayer.onSwitchLayout = { compactMode = false }
+        // D-pad focus in the player is shown by color, not FocusHighlight's outline.
+        focusColors.attach(this)
+        compactPlayer.focusColors = focusColors
         refreshSettings(null)
         prefs.registerOnSharedPreferenceChangeListener(this)
         activity.controllerViewModel.customCommandListeners.addCallback(activity.lifecycle) { _, command, _ ->
@@ -1464,6 +1470,8 @@ class FullBottomSheet
                 colorContrastFainted,
                 selectorBackground
             )
+            focusColors.update(ctx, albumColors = wrappedContext != null)
+            focusColors.refresh(this)
         }
     }
 
@@ -1642,6 +1650,12 @@ class FullBottomSheet
             super.addFocusables(views, direction, focusableMode)
         }
     }
+
+    // D-pad entering the player (it opening, or a layout switch) starts on play/pause, in
+    // whichever layout is showing; the regular player's views must not get focus in compact mode.
+    override fun onRequestFocusInDescendants(direction: Int, previouslyFocusedRect: Rect?): Boolean =
+        if (compactMode) compactPlayer.focusPlayButton()
+        else bottomSheetFullControllerButton.requestFocus()
 
     override fun addChildrenForAccessibility(outChildren: ArrayList<View>) {
         if (compactMode) {

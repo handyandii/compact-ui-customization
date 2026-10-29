@@ -95,6 +95,15 @@
             android:widgetLayout="@layout/preference_switch_widget"
             app:iconSpaceReserved="false" />
 
+        <SwitchPreferenceCompat
+            android:defaultValue="false"
+            android:key="focus_high_contrast"
+            android:layout="@layout/preference_switch"
+            android:summary="@string/settings_focus_high_contrast_summary"
+            android:title="@string/settings_focus_high_contrast"
+            android:widgetLayout="@layout/preference_switch_widget"
+            app:iconSpaceReserved="false" />
+
         <org.akanework.gramophone.ui.components.ControllerButtonPreference
             android:dependency="controller_buttons"
             android:key="controller_key_play_pause"
@@ -118,9 +127,30 @@
 
         <org.akanework.gramophone.ui.components.ControllerButtonPreference
             android:dependency="controller_buttons"
+            android:key="controller_key_now_playing"
+            android:layout="@layout/preference_switch"
+            android:title="@string/controller_action_now_playing"
+            app:iconSpaceReserved="false" />
+
+        <org.akanework.gramophone.ui.components.ControllerButtonPreference
+            android:dependency="controller_buttons"
             android:key="controller_key_switch_layout"
             android:layout="@layout/preference_switch"
             android:title="@string/controller_action_switch_layout"
+            app:iconSpaceReserved="false" />
+
+        <org.akanework.gramophone.ui.components.ControllerButtonPreference
+            android:dependency="controller_buttons"
+            android:key="controller_key_repeat"
+            android:layout="@layout/preference_switch"
+            android:title="@string/controller_action_repeat"
+            app:iconSpaceReserved="false" />
+
+        <org.akanework.gramophone.ui.components.ControllerButtonPreference
+            android:dependency="controller_buttons"
+            android:key="controller_key_shuffle"
+            android:layout="@layout/preference_switch"
+            android:title="@string/controller_action_shuffle"
             app:iconSpaceReserved="false" />
 
     </PreferenceCategory>

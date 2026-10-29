@@ -109,6 +109,8 @@ class ControllerButtonPreference(context: Context, attrs: AttributeSet?) :
     private fun assign(newKeyCode: Int) {
         val prefs = sharedPreferences ?: return
         for (other in Action.entries) {
+            // Unbinding (UNSET) never conflicts with other unbound actions.
+            if (newKeyCode == ControllerButtons.UNSET) break
             if (other == action || other.keyCode(prefs) != newKeyCode) continue
             prefs.edit { putInt(other.prefKey, ControllerButtons.UNSET) }
             (preferenceManager?.findPreference<Preference>(other.prefKey)

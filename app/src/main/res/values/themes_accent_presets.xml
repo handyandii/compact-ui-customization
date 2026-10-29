@@ -52,6 +52,8 @@
         <item name="colorSurfaceContainer">@color/accent_red_surfaceContainer</item>
         <item name="colorSurfaceContainerHigh">@color/accent_red_surfaceContainerHigh</item>
         <item name="colorSurfaceContainerHighest">@color/accent_red_surfaceContainerHighest</item>
+        <item name="playerFocusColor">@color/accent_red_tertiary</item>
+        <item name="playerOnFocusColor">@color/accent_red_onTertiary</item>
     </style>
 
     <style name="ThemeOverlay.Gramophone.Accent.Pink" parent="">
@@ -101,6 +103,8 @@
         <item name="colorSurfaceContainer">@color/accent_pink_surfaceContainer</item>
         <item name="colorSurfaceContainerHigh">@color/accent_pink_surfaceContainerHigh</item>
         <item name="colorSurfaceContainerHighest">@color/accent_pink_surfaceContainerHighest</item>
+        <item name="playerFocusColor">@color/accent_pink_tertiary</item>
+        <item name="playerOnFocusColor">@color/accent_pink_onTertiary</item>
     </style>
 
     <style name="ThemeOverlay.Gramophone.Accent.Purple" parent="">
@@ -150,6 +154,8 @@
         <item name="colorSurfaceContainer">@color/accent_purple_surfaceContainer</item>
         <item name="colorSurfaceContainerHigh">@color/accent_purple_surfaceContainerHigh</item>
         <item name="colorSurfaceContainerHighest">@color/accent_purple_surfaceContainerHighest</item>
+        <item name="playerFocusColor">@color/accent_purple_tertiary</item>
+        <item name="playerOnFocusColor">@color/accent_purple_onTertiary</item>
     </style>
 
     <style name="ThemeOverlay.Gramophone.Accent.Indigo" parent="">
@@ -199,6 +205,8 @@
         <item name="colorSurfaceContainer">@color/accent_indigo_surfaceContainer</item>
         <item name="colorSurfaceContainerHigh">@color/accent_indigo_surfaceContainerHigh</item>
         <item name="colorSurfaceContainerHighest">@color/accent_indigo_surfaceContainerHighest</item>
+        <item name="playerFocusColor">@color/accent_indigo_tertiary</item>
+        <item name="playerOnFocusColor">@color/accent_indigo_onTertiary</item>
     </style>
 
     <style name="ThemeOverlay.Gramophone.Accent.Blue" parent="">
@@ -248,6 +256,8 @@
         <item name="colorSurfaceContainer">@color/accent_blue_surfaceContainer</item>
         <item name="colorSurfaceContainerHigh">@color/accent_blue_surfaceContainerHigh</item>
         <item name="colorSurfaceContainerHighest">@color/accent_blue_surfaceContainerHighest</item>
+        <item name="playerFocusColor">@color/accent_blue_tertiary</item>
+        <item name="playerOnFocusColor">@color/accent_blue_onTertiary</item>
     </style>
 
     <style name="ThemeOverlay.Gramophone.Accent.Teal" parent="">
@@ -297,6 +307,8 @@
         <item name="colorSurfaceContainer">@color/accent_teal_surfaceContainer</item>
         <item name="colorSurfaceContainerHigh">@color/accent_teal_surfaceContainerHigh</item>
         <item name="colorSurfaceContainerHighest">@color/accent_teal_surfaceContainerHighest</item>
+        <item name="playerFocusColor">@color/accent_teal_tertiary</item>
+        <item name="playerOnFocusColor">@color/accent_teal_onTertiary</item>
     </style>
 
     <style name="ThemeOverlay.Gramophone.Accent.Green" parent="">
@@ -346,6 +358,8 @@
         <item name="colorSurfaceContainer">@color/accent_green_surfaceContainer</item>
         <item name="colorSurfaceContainerHigh">@color/accent_green_surfaceContainerHigh</item>
         <item name="colorSurfaceContainerHighest">@color/accent_green_surfaceContainerHighest</item>
+        <item name="playerFocusColor">@color/accent_green_tertiary</item>
+        <item name="playerOnFocusColor">@color/accent_green_onTertiary</item>
     </style>
 
     <style name="ThemeOverlay.Gramophone.Accent.Yellow" parent="">
@@ -395,6 +409,8 @@
         <item name="colorSurfaceContainer">@color/accent_yellow_surfaceContainer</item>
         <item name="colorSurfaceContainerHigh">@color/accent_yellow_surfaceContainerHigh</item>
         <item name="colorSurfaceContainerHighest">@color/accent_yellow_surfaceContainerHighest</item>
+        <item name="playerFocusColor">@color/accent_yellow_tertiary</item>
+        <item name="playerOnFocusColor">@color/accent_yellow_onTertiary</item>
     </style>
 
     <style name="ThemeOverlay.Gramophone.Accent.Orange" parent="">
@@ -444,6 +460,8 @@
         <item name="colorSurfaceContainer">@color/accent_orange_surfaceContainer</item>
         <item name="colorSurfaceContainerHigh">@color/accent_orange_surfaceContainerHigh</item>
         <item name="colorSurfaceContainerHighest">@color/accent_orange_surfaceContainerHighest</item>
+        <item name="playerFocusColor">@color/accent_orange_tertiary</item>
+        <item name="playerOnFocusColor">@color/accent_orange_onTertiary</item>
     </style>
 
     <style name="ThemeOverlay.Gramophone.Accent.Grey" parent="">
@@ -493,5 +511,7 @@
         <item name="colorSurfaceContainer">@color/accent_grey_surfaceContainer</item>
         <item name="colorSurfaceContainerHigh">@color/accent_grey_surfaceContainerHigh</item>
         <item name="colorSurfaceContainerHighest">@color/accent_grey_surfaceContainerHighest</item>
+        <item name="playerFocusColor">@color/accent_grey_tertiary</item>
+        <item name="playerOnFocusColor">@color/accent_grey_onTertiary</item>
     </style>
 </resources>

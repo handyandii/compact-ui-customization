@@ -111,6 +111,9 @@ public class Gen {
             for (Object[] at : attrs) {
                 th.append(String.format("        <item name=\"%s\">@color/accent_%s_%s</item>\n", at[0], name, at[1]));
             }
+            // Focused now playing control (PlayerFocusColors.kt): the theme's tertiary accent.
+            th.append(String.format("        <item name=\"playerFocusColor\">@color/accent_%s_tertiary</item>\n", name));
+            th.append(String.format("        <item name=\"playerOnFocusColor\">@color/accent_%s_onTertiary</item>\n", name));
             th.append("    </style>\n");
         }
         th.append("</resources>\n");

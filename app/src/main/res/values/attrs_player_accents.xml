@@ -11,4 +11,9 @@
     <!-- Repeat/shuffle when on (default colorOnSurface) and off (default colorOutlineVariant). -->
     <attr name="playerToggleOnColor" format="color" />
     <attr name="playerToggleOffColor" format="color" />
+    <!-- A now playing control with D-pad focus: its fill and its icon (PlayerFocusColors.kt). Every
+         color theme sets these; without one (Device default) or with album art colors, the player
+         palette's colorTertiary/colorOnTertiary are used. -->
+    <attr name="playerFocusColor" format="color" />
+    <attr name="playerOnFocusColor" format="color" />
 </resources>

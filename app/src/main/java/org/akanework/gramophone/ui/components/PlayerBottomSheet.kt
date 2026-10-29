@@ -26,6 +26,7 @@ import android.os.Handler
 import android.os.Looper
 import android.util.AttributeSet
 import android.view.View
+import android.view.ViewGroup
 import android.view.WindowInsets
 import android.widget.FrameLayout
 import androidx.activity.BackEventCompat
@@ -126,7 +127,7 @@ class PlayerBottomSheet private constructor(
     }
 
     fun open() {
-        if (standardBottomSheetBehavior!!.state == BottomSheetBehavior.STATE_COLLAPSED) {
+        if (standardBottomSheetBehavior?.state == BottomSheetBehavior.STATE_COLLAPSED) {
             standardBottomSheetBehavior!!.state = BottomSheetBehavior.STATE_EXPANDED
         }
     }
@@ -189,6 +190,7 @@ class PlayerBottomSheet private constructor(
                 }
             }
             dispatchBottomSheetInsets()
+            updateFocusForState(newState)
         }
 
         override fun onSlide(
@@ -205,6 +207,30 @@ class PlayerBottomSheet private constructor(
             previewPlayer.alpha = 1 - (slideOffset)
             fullPlayer.alpha = slideOffset
             lyricsFrame.alpha = slideOffset
+        }
+    }
+
+    private var focusBeforeExpand: View? = null
+
+    /**
+     * For game controllers: while the player covers the screen, D-pad focus stays inside it (the
+     * library behind it would otherwise still be focusable) and starts on play/pause. Collapsing
+     * puts focus back where it was.
+     */
+    private fun updateFocusForState(state: Int) {
+        val blocked = fragmentContainer as ViewGroup
+        if (state == BottomSheetBehavior.STATE_EXPANDED) {
+            if (blocked.descendantFocusability == ViewGroup.FOCUS_BLOCK_DESCENDANTS) return
+            focusBeforeExpand = blocked.findFocus()
+            blocked.descendantFocusability = ViewGroup.FOCUS_BLOCK_DESCENDANTS
+            fullPlayer.requestFocus()
+        } else if (state == BottomSheetBehavior.STATE_COLLAPSED
+            || state == BottomSheetBehavior.STATE_HIDDEN
+        ) {
+            if (blocked.descendantFocusability != ViewGroup.FOCUS_BLOCK_DESCENDANTS) return
+            blocked.descendantFocusability = ViewGroup.FOCUS_AFTER_DESCENDANTS
+            focusBeforeExpand?.takeIf { it.isAttachedToWindow && it.isShown }?.requestFocus()
+            focusBeforeExpand = null
         }
     }
 

@@ -194,6 +194,7 @@ class CompactPlayerView(context: Context, attrs: AttributeSet?) :
         layoutRes = res
         inflate(context, res, this)
         bindViews()
+        focusColors?.attach(this)
         scalables = listOf(
             coverFrame, title, subtitle, previousButton, playButton, nextButton,
             loopButton, shuffleButton, playlistButton
@@ -576,6 +577,16 @@ class CompactPlayerView(context: Context, attrs: AttributeSet?) :
     override fun onPlaybackStateChanged(playbackState: Int) {
         updatePosition()
     }
+
+    /** Shows D-pad focus on the controls by color; set by FullBottomSheet. */
+    var focusColors: PlayerFocusColors? = null
+        set(value) {
+            field = value
+            value?.attach(this)
+        }
+
+    /** Gives D-pad focus to play/pause; see FullBottomSheet.onRequestFocusInDescendants. */
+    fun focusPlayButton(): Boolean = playButton.requestFocus()
 
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()

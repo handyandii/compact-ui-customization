@@ -27,9 +27,9 @@ import org.akanework.gramophone.logic.getIntStrict
 import org.akanework.gramophone.logic.playOrPause
 
 /**
- * Game controller playback buttons (for retro handhelds). Each [Action] is bound to one key code,
+ * Game controller buttons (for retro handhelds). Each [Action] is bound to one key code,
  * changeable in settings (ControllerButtonPreference); by default Start plays/pauses, L1 goes to
- * the previous track and R1 to the next one. Toggled by the "controller_buttons" setting. Called
+ * the previous track, R1 to the next one and Select switches layout (see [Host.switchLayout]). Toggled by the "controller_buttons" setting. Called
  * from MainActivity.dispatchKeyEvent, so it works no matter which view has focus.
  */
 object ControllerButtons {
@@ -38,18 +38,28 @@ object ControllerButtons {
     /** Key code value for an action without a button. */
     const val UNSET = KeyEvent.KEYCODE_UNKNOWN
 
+    /** What the actions act on; implemented by MainActivity. */
+    interface Host {
+        val player: Player?
+
+        /** Compact ↔ full player if the player is open, otherwise home menu ↔ tabs. */
+        fun switchLayout()
+    }
+
     enum class Action(
         val prefKey: String,
         val defaultKeyCode: Int,
         @StringRes val title: Int,
-        val run: Player.() -> Unit
+        val run: Host.() -> Unit
     ) {
         PLAY_PAUSE("controller_key_play_pause", KeyEvent.KEYCODE_BUTTON_START,
-            R.string.controller_action_play_pause, { playOrPause() }),
+            R.string.controller_action_play_pause, { player?.playOrPause() }),
         PREVIOUS("controller_key_previous", KeyEvent.KEYCODE_BUTTON_L1,
-            R.string.controller_action_previous, { seekToPrevious() }),
+            R.string.controller_action_previous, { player?.seekToPrevious() }),
         NEXT("controller_key_next", KeyEvent.KEYCODE_BUTTON_R1,
-            R.string.controller_action_next, { seekToNext() });
+            R.string.controller_action_next, { player?.seekToNext() }),
+        SWITCH_LAYOUT("controller_key_switch_layout", KeyEvent.KEYCODE_BUTTON_SELECT,
+            R.string.controller_action_switch_layout, { switchLayout() });
 
         fun keyCode(prefs: SharedPreferences): Int = prefs.getIntStrict(prefKey, defaultKeyCode)
 
@@ -89,13 +99,13 @@ object ControllerButtons {
     }
 
     /** Returns true if [event] was a bound controller button and has been handled. */
-    fun handle(event: KeyEvent, prefs: SharedPreferences, player: () -> Player?): Boolean {
+    fun handle(event: KeyEvent, prefs: SharedPreferences, host: Host): Boolean {
         if (event.keyCode == UNSET || !prefs.getBooleanStrict(PREF_KEY, true)) return false
         val action = Action.entries.firstOrNull { it.keyCode(prefs) == event.keyCode }
             ?: return false
         // Act once per press, but swallow the key up and repeats too so nothing else sees them.
         if (event.action == KeyEvent.ACTION_DOWN && event.repeatCount == 0) {
-            player()?.let { action.run(it) }
+            action.run(host)
         }
         return true
     }

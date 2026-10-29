@@ -842,7 +842,21 @@ class MainActivity : BaseActivity() {
     }
 
     override fun dispatchKeyEvent(event: KeyEvent): Boolean =
-        ControllerButtons.handle(event, prefs) { getPlayer() } || super.dispatchKeyEvent(event)
+        ControllerButtons.handle(event, prefs, controllerHost) || super.dispatchKeyEvent(event)
+
+    private val controllerHost = object : ControllerButtons.Host {
+        override val player
+            get() = getPlayer()
+
+        override fun switchLayout() {
+            if (playerBottomSheet.visibleAndExpanded) {
+                playerBottomSheet.fullPlayer.compactMode = !playerBottomSheet.fullPlayer.compactMode
+            } else {
+                (supportFragmentManager.findFragmentById(R.id.fragment_viewpager)
+                        as? ViewPagerFragment)?.takeIf { !it.isHidden }?.toggleHomeMenu()
+            }
+        }
+    }
 
     /**
      * getPlayer:

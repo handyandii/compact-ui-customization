@@ -56,6 +56,7 @@ import org.akanework.gramophone.logic.utils.SdScanner
 import org.akanework.gramophone.logic.setMediaItemsWithTitle
 import org.akanework.gramophone.ui.MainActivity
 import org.akanework.gramophone.ui.adapters.ViewPager2Adapter
+import org.akanework.gramophone.ui.components.HomeMenu
 import org.akanework.gramophone.ui.components.PlayerBottomSheet
 import org.akanework.gramophone.ui.fragments.settings.MainSettingsActivity
 import org.nift4.mediastorecompat.MediaStoreCompat
@@ -73,6 +74,7 @@ class ViewPagerFragment : BaseFragment(true) {
     val recycledViewPool = RecyclerView.RecycledViewPool()
     private lateinit var viewPager2: ViewPager2
     private lateinit var adapter: ViewPager2Adapter
+    private var homeMenu: HomeMenu? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -187,6 +189,10 @@ class ViewPagerFragment : BaseFragment(true) {
                     }
                 }
 
+                R.id.home_menu_toggle -> {
+                    toggleHomeMenu()
+                }
+
                 R.id.settings -> {
                     activity.startActivity(Intent(activity, MainSettingsActivity::class.java))
                 }
@@ -266,7 +272,29 @@ class ViewPagerFragment : BaseFragment(true) {
             viewPager2.isUserInputEnabled = true
         }
 
+        homeMenu = HomeMenu(this, rootView, viewPager2, adapter, savedInstanceState)
+
         return rootView
+    }
+
+    override fun onDestroyView() {
+        homeMenu = null
+        super.onDestroyView()
+    }
+
+    override fun onHiddenChanged(hidden: Boolean) {
+        super.onHiddenChanged(hidden)
+        homeMenu?.onHiddenChanged()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        homeMenu?.onSaveInstanceState(outState)
+    }
+
+    /** Switches between the home menu and the tabs (overflow menu, controller button). */
+    fun toggleHomeMenu() {
+        homeMenu?.toggle()
     }
 
     fun maybeReportFullyDrawn(itemId: Int) {

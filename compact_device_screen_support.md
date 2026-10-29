@@ -253,18 +253,19 @@ To add a built-in font, put its Regular and Bold TTFs in `res/font/` as `<name>_
 
 ## Also in this change: game controller buttons
 
-For handhelds with built-in gamepads. While the app is open, controller buttons can play/pause, go to the previous track and go to the next track. By default these are **Start**, **L1** and **R1**. They work on every screen of the main window, whichever view has focus.
+For handhelds with built-in gamepads. While the app is open, controller buttons can play/pause, go to the previous track, go to the next track and switch layout. By default these are **Start**, **L1**, **R1** and **Select**. They work on every screen of the main window, whichever view has focus.
 
 - **Settings:** **Settings → Behavior → Game controller**:
   - **"Controller playback buttons"** (`controller_buttons`) turns the feature on or off. It's on by default.
-  - Below it is a list with one row per action (Play/pause, Previous track, Next track). Each row shows its current button and an edit icon. The rows are disabled while the switch is off.
+  - Below it is a list with one row per action (Play/pause, Previous track, Next track, Switch layout). Each row shows its current button and an edit icon. The rows are disabled while the switch is off.
 - **Changing a button:** tap a row to open a popup showing the current button.
   - **Set** removes the current button immediately, then waits for a button press. The next button pressed (on key down, repeats ignored) takes over the action. If another action used that button, it loses it and is left without a button, and a toast says so.
   - **Cancel** stops waiting. The action stays without a button until one is set.
   - **Default** puts back the action's default button.
   - Back, Home, Power, app switch and the volume keys can't be bound. Back still cancels the popup, and volume keeps working.
-- **Prefs:** `controller_key_play_pause`, `controller_key_previous` and `controller_key_next` are ints holding Android key codes, with `KEYCODE_UNKNOWN` (0) meaning no button. Button names come from `ControllerButtons.keyName()`: gamepad buttons get short names (A, B, X, Y, L1, R1, L2, R2, L3, R3, Start, Select), and any other key uses its Android key name.
-- **How it works:** `MainActivity.dispatchKeyEvent()` passes every key event to `ControllerButtons.handle()` first. If the key is bound to an action, it runs the action once on key down and swallows the key up and repeats, so nothing else reacts to that button. Previous uses `seekToPrevious()`, the same as the on-screen previous button, so it restarts the current track if it's a few seconds in, and it follows the "Always skip to previous" setting.
+- **Switch layout:** with the now playing screen open, it swaps between the compact and the full player. Anywhere else on the home screen, it swaps between the home menu and the tabs. Behind other screens (search, an album, and so on) it does nothing. Like the on-screen switch button, it doesn't change the "by default" settings.
+- **Prefs:** `controller_key_play_pause`, `controller_key_previous`, `controller_key_next` and `controller_key_switch_layout` are ints holding Android key codes, with `KEYCODE_UNKNOWN` (0) meaning no button. Button names come from `ControllerButtons.keyName()`: gamepad buttons get short names (A, B, X, Y, L1, R1, L2, R2, L3, R3, Start, Select), and any other key uses its Android key name.
+- **How it works:** `MainActivity.dispatchKeyEvent()` passes every key event to `ControllerButtons.handle()` first, along with a `ControllerButtons.Host` that gives the actions the player and `switchLayout()`. If the key is bound to an action, it runs the action once on key down and swallows the key up and repeats, so nothing else reacts to that button. Previous uses `seekToPrevious()`, the same as the on-screen previous button, so it restarts the current track if it's a few seconds in, and it follows the "Always skip to previous" setting.
 - **Limits:**
   - Bound buttons only work while the app is in the foreground, and only in the main window (not in settings, or while a dialog is open).
   - Binding a D-pad or A button takes it away from normal navigation in the main window. To fix that, rebind it or turn the feature off.
@@ -275,8 +276,36 @@ For handhelds with built-in gamepads. While the app is open, controller buttons 
 | `app/src/main/java/org/akanework/gramophone/logic/ui/ControllerButtons.kt` | **New.** The actions with their default buttons and pref keys, button names, and key handling. |
 | `app/src/main/java/org/akanework/gramophone/ui/components/ControllerButtonPreference.kt` | **New.** One action row in settings and the popup for changing its button. |
 | `app/src/main/res/layout/preference_controller_edit.xml` | **New.** The edit icon on each row. |
-| `app/src/main/java/org/akanework/gramophone/ui/MainActivity.kt` | `dispatchKeyEvent()` hook. |
-| `app/src/main/res/xml/settings_behavior.xml` | The "Game controller" category: the switch and the three action rows. |
+| `app/src/main/java/org/akanework/gramophone/ui/MainActivity.kt` | `dispatchKeyEvent()` hook and the `ControllerButtons.Host` (player, switch layout). |
+| `app/src/main/res/xml/settings_behavior.xml` | The "Game controller" category: the switch and the four action rows. |
+
+## Also in this change: home menu
+
+An alternative to the library tabs that is easier to use with a game controller. Instead of a row of tabs, the home screen shows four big tiles with icons: **Artists**, **Albums**, **Songs** and **Playlists**. Picking a tile opens that category's usual list, and Back (or **B**, which Android turns into Back for gamepads) returns to the tiles. The D-pad moves between tiles and **A** opens one.
+
+- **Settings:** **Settings → Appearance → Home screen → "Home menu by default"** (`home_menu`, boolean, off by default) picks what the app starts with. The home screen's overflow menu (**Show home menu** / **Show tabs**) and the controller's **Switch layout** button switch for the current session only, the same way the compact player's switch button works alongside "Compact player by default". Changing the setting applies it right away.
+- **Layout:** the tiles are 4 × 1 on screens wider than tall (like the ARBOR's 3:2) and 2 × 2 on tall screens. The big title collapses while the tiles show, to make room for them. A focused tile gets a thick outline in `colorOnSurface`, so it stands out in every color theme.
+- **Inside a category:** the tabs are hidden and swiping between pages is off, the title shows the category name, and the toolbar shows a back arrow for touch users.
+- **Hidden tabs:** tiles only show for categories whose tab is enabled in *Tab order*, because a hidden tab has no page to open.
+- **How it works:** `HomeMenu` lives inside `ViewPagerFragment` and covers its `ViewPager2`. Picking a tile selects that tab's page and shows the pager again, so the regular list fragments are reused unchanged (`AdapterFragment` needs `ViewPagerFragment` as its parent, so it can't be opened on its own). The pager is made `INVISIBLE`, not `GONE`, while the tiles show, so the lists keep loading and keep their scroll position.
+- **Back handling:** `HomeMenu` adds an `OnBackPressedCallback` that is enabled only in a category, in home menu mode, and while `ViewPagerFragment` isn't hidden behind another fragment (search, an album, and so on). The player's own back callback is added later (when the bottom sheet is first laid out), so Back still collapses an expanded player first.
+- **Focus:** the focused tile is filled with `colorPrimary`, outlined in `colorOnSurface` and enlarged 5% (`HomeMenu.styleTile()`, swapping `home_menu_tile_background` and `home_menu_tile_background_focused`). This is set from a focus listener rather than a drawable state selector, which didn't show on the ARBOR.
+- **Title:** **Settings → Appearance → Home screen → "Home screen title"** (`home_title`, string, empty = the app name) sets the big title on the home screen. `HomeTitlePreference` is a text dialog with OK, Cancel and Default; `HomeMenu` applies it (and the category names in home menu mode).
+- **State:** whether the home menu is on (`home_menu_enabled`) and whether the tiles or a category is showing (`home_menu_shown`) are saved in the fragment's instance state, so a session switch survives rotation and theme changes.
+
+| File | Change |
+|---|---|
+| `app/src/main/java/org/akanework/gramophone/ui/components/HomeMenu.kt` | **New.** Tiles, switching between tiles and lists, back handling, grid orientation. |
+| `app/src/main/res/layout/home_menu.xml`, `home_menu_tile.xml` | **New.** The tile grid and one tile. |
+| `app/src/main/res/drawable/home_menu_tile_background.xml` | **New.** Tile background with ripple and focus outline. |
+| `app/src/main/java/org/akanework/gramophone/ui/components/HomeTitlePreference.kt`, `res/layout/dialog_home_title.xml` | **New.** The "Home screen title" setting and its dialog. |
+| `app/src/main/res/drawable/home_menu_tile_background_focused.xml` | **New.** Focused tile background. |
+| `app/src/main/res/drawable/ic_music_note.xml` | **New.** Songs icon (Material Symbols). The other tiles reuse `ic_groups`, `ic_album` and `ic_playlist_play`. |
+| `app/src/main/java/org/akanework/gramophone/ui/fragments/ViewPagerFragment.kt` | Creates `HomeMenu`; overflow menu item; `toggleHomeMenu()` for the controller button; `onHiddenChanged` and `onSaveInstanceState` hooks. |
+| `app/src/main/java/org/akanework/gramophone/ui/adapters/ViewPager2Adapter.kt` | `positionOf(id)`, the page of a tab or -1 if it's hidden. |
+| `app/src/main/res/layout/fragment_viewpager.xml` | Includes `home_menu.xml`. |
+| `app/src/main/res/menu/home_menu.xml` | The **Show home menu** / **Show tabs** item. |
+| `app/src/main/res/xml/settings_appearance.xml` | The "Home menu" switch. |
 
 ## Building
 
@@ -313,6 +342,26 @@ So it can't be confused with, or collide with, the official app, this fork uses 
 - **APK file name:** `CustomCompactGramophone-<version>-<type>.apk`.
 - **Unchanged on purpose:** the Kotlin code namespace (`org.akanework.gramophone.*`), intent action names and class names. Renaming those would touch every file and make merging upstream updates much harder, with no benefit to users.
 
+## Also in this change: D-pad focus
+
+Controller navigation outside the home menu needed a few fixes, since most of the app's views have no visible focused state:
+
+- **Focus outline:** `logic/ui/FocusHighlight.kt`, installed for every activity in `BaseActivity.onPostCreate()` (the main screen and all settings pages), draws a rounded `colorOnSurface` outline with a light fill in the overlay of whichever view has focus. It only shows outside touch mode (after a D-pad or key press), so touch use looks unchanged. Views that draw their own focus state set the `R.id.focus_highlight_skip` tag (`res/values/ids_focus_highlight.xml`), as the home menu tiles do.
+- **List rows:** in `BaseAdapter`, the ⋮ button on each row is no longer focusable, so the D-pad moves between whole rows (in the 2-column grid, focus used to stay in the ⋮ column). The row's menu is now on a long press in every layout, not only the grid, so holding **A** opens it. Touch can still use the ⋮ button.
+- **Toolbars:** Material's `AppBarLayout` style (`Widget.Design.AppBarLayout`) and AppCompat's Toolbar style on API 26+ (`Base.V26.Widget.AppCompat.Toolbar`) both set `touchscreenBlocksFocus` with `keyboardNavigationCluster`. On touchscreen devices that makes each one a trap for D-pad navigation: the app bar kept focus out of the toolbar, and the toolbar kept it in once there (only keyboard cluster navigation crosses them). `ViewCompatInflater` turns `touchscreenBlocksFocus` off for every inflated `AppBarLayout` and `Toolbar`, so the home screen's Search/Settings/⋮ and the settings pages' back arrow can be reached with the D-pad.
+- **Getting to settings:** the Settings item in the home screen toolbar is now an always-visible icon (`showAsAction="ifRoom"` in `res/menu/home_menu.xml`) instead of an overflow entry, so it's one D-pad press up from the tiles or the tabs. Settings pages are preference lists, which already move by D-pad; A opens or toggles a row, B goes back. Dialogs with lists (color theme, font, tab order) use Android's list highlight. The Contributors and Open source licenses pages are Compose and don't get the outline.
+- **Scrolling titles:** `MarqueeTextView` is no longer focusable, so the D-pad doesn't stop on title text in the mini player and the compact player. The marquee still runs, because the view's `isFocused()` always returns true.
+
+| File | Change |
+|---|---|
+| `app/src/main/java/org/akanework/gramophone/logic/ui/FocusHighlight.kt` | **New.** The focus outline. |
+| `app/src/main/res/values/ids_focus_highlight.xml` | **New.** The opt-out tag key. |
+| `app/src/main/java/org/akanework/gramophone/logic/ui/BaseActivity.kt` | Installs `FocusHighlight` in `onPostCreate()`. |
+| `app/src/main/res/menu/home_menu.xml` | Settings shown as a toolbar icon. |
+| `app/src/main/java/org/akanework/gramophone/logic/ui/ViewCompatInflater.kt` | `touchscreenBlocksFocus = false` on app bars and toolbars. |
+| `app/src/main/java/org/akanework/gramophone/ui/adapters/BaseAdapter.kt` | ⋮ not focusable; long press menu in every layout. |
+| `app/src/main/java/org/akanework/gramophone/ui/components/MarqueeTextView.kt` | Not focusable. |
+
 ## Known limitations and things to check
 
 - **Untested on hardware.** Check these on each target device:
@@ -328,7 +377,8 @@ So it can't be confused with, or collide with, the official app, this fork uses 
 - **Hidden player still does work.** In compact mode the regular player keeps updating and animating (seek bar, marquee text) without being drawn. The cost should be small, but it isn't zero.
 - **English only.** The new strings are English only.
 - **No automatic switching.** The layout doesn't change automatically based on screen shape; it's chosen with the setting and the switch button.
-- **Controller buttons on other devices.** The defaults (Start, L1, R1) use the standard Android gamepad key codes. Some handhelds send different codes, so check the defaults on each device. Buttons can be rebound in settings.
+- **Controller buttons on other devices.** The defaults (Start, L1, R1, Select) use the standard Android gamepad key codes. Some handhelds send different codes, so check the defaults on each device. Buttons can be rebound in settings.
+- **Home menu.** Check on each device: D-pad focus lands on a tile, B/Back returns from a category to the tiles (and collapses an expanded player first), and the tiles fit next to the mini player. Only the four shortcut categories have tiles; Genres, Dates and Folders are only reachable from the tabs.
 - **Fonts with unusual sizes.** Wide or tall fonts (VT323, Pixelify Sans, imported fonts) can overflow tight rows, especially in the compact player. Check the compact layouts with each font.
 
 ---

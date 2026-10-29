@@ -19,6 +19,7 @@ package org.akanework.gramophone.logic.ui
 
 import android.content.Context
 import android.content.res.TypedArray
+import android.os.Build
 import android.util.AttributeSet
 import android.view.View
 import android.view.ViewGroup
@@ -27,6 +28,7 @@ import androidx.appcompat.widget.AppCompatTextView
 import androidx.appcompat.widget.Toolbar
 import androidx.appcompat.widget.TooltipCompat
 import androidx.core.graphics.TypefaceCompat
+import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.android.material.textview.MaterialTextView
 import com.google.android.material.theme.MaterialComponentsViewInflater
@@ -155,6 +157,13 @@ class ViewCompatInflater
                     result.setCollapsedTitleTypeface(it)
                     result.setExpandedTitleTypeface(it)
                 }
+            }
+            // Material's AppBarLayout style and AppCompat's Toolbar style (API 26+) set
+            // touchscreenBlocksFocus, so on touchscreen devices the D-pad (as opposed to keyboard
+            // cluster navigation) could neither enter the top bar nor leave it again.
+            if ((result is AppBarLayout || result is Toolbar)
+                && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                result.touchscreenBlocksFocus = false
             }
             val a = context.theme.obtainStyledAttributes(
                 attrs,

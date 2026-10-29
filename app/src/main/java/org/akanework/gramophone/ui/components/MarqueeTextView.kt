@@ -52,8 +52,10 @@ constructor(
                 .TruncateAt
                 .MARQUEE
         marqueeRepeatLimit = -1
-        isFocusable = true
-        isFocusableInTouchMode = true
+        // Not focusable, so D-pad navigation doesn't stop on titles that do nothing when pressed.
+        // The marquee still runs because isFocused() always returns true.
+        isFocusable = false
+        isFocusableInTouchMode = false
         isHorizontalFadingEdgeEnabled = true
     }
 

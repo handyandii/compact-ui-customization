@@ -83,6 +83,9 @@ class ViewPager2Adapter(
 
     fun getLabelResId(position: Int) = tabs[position]!!.label
 
+    /** Position of the tab with this id, or -1 if that tab is hidden. */
+    fun positionOf(id: Int) = tabs.indexOfFirst { it?.id == id }.let { if (it < itemCount) it else -1 }
+
     override fun getItemCount() = tabs.indexOf(null)
         .also { if (it == -1) throw IllegalStateException("indexOf null is -1 in tab list?") }
 

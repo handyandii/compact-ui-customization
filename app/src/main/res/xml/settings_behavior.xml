@@ -116,6 +116,13 @@
             android:title="@string/controller_action_next"
             app:iconSpaceReserved="false" />
 
+        <org.akanework.gramophone.ui.components.ControllerButtonPreference
+            android:dependency="controller_buttons"
+            android:key="controller_key_switch_layout"
+            android:layout="@layout/preference_switch"
+            android:title="@string/controller_action_switch_layout"
+            app:iconSpaceReserved="false" />
+
     </PreferenceCategory>
 
 </PreferenceScreen>

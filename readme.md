@@ -1,6 +1,6 @@
 # Custom Compact Gramophone
 
-An unofficial fork of [Gramophone](https://github.com/FoedusProgramme/Gramophone), the lightweight Material 3 music player. It adds a **compact now playing screen** for square and wide screens (4:3, 3:2, 1:1, common on retro handhelds) plus **app-wide color themes** that work on every device, **custom fonts** and **game controller buttons**.
+An unofficial fork of [Gramophone](https://github.com/FoedusProgramme/Gramophone), the lightweight Material 3 music player. It adds a **compact now playing screen** for square and wide screens (4:3, 3:2, 1:1, common on retro handhelds) plus **app-wide color themes** that work on every device, **custom fonts**, **game controller buttons** and a controller-friendly **home menu**.
 
 > [!WARNING]
 > **Unofficial, AI-assisted fork.** The changes in this fork were written with the help of Claude (an AI coding assistant from Anthropic) and have **not** been reviewed by the Gramophone maintainers. Please don't report bugs from this fork to the upstream Gramophone project. Open an issue here instead.
@@ -34,7 +34,13 @@ Change the app's font in *Settings → Appearance → Font*:
 - **Your own fonts:** import any `.ttf` or `.otf` file from your device. Imported fonts stay in the list until you remove them.
 
 ### Game controller buttons
-On handhelds with built-in controls, **Start** plays and pauses, **L1** goes to the previous track and **R1** to the next one. In *Settings → Behavior → Game controller* you can turn this off or set a different button for each action: tap the action, tap **Set**, then press the button you want.
+On handhelds with built-in controls, **Start** plays and pauses, **L1** goes to the previous track, **R1** to the next one, and **Select** switches layout: between the compact and full player when the now playing screen is open, and between the home menu and the tabs everywhere else on the home screen. In *Settings → Behavior → Game controller* you can turn this off or set a different button for each action: tap the action, tap **Set**, then press the button you want.
+
+### Home menu
+An optional home screen with four big tiles (**Artists**, **Albums**, **Songs** and **Playlists**) instead of tabs, made for controllers: move with the D-pad, open with **A**, and go back to the tiles with **B**. Make it what the app opens with in *Settings → Appearance → Home screen → Home menu by default*, or switch anytime with **Select** or the home screen's **⋮** menu (**Show home menu** / **Show tabs**).
+
+### Controller navigation
+The D-pad now shows which item is selected with an outline in the main screen and in settings (the Settings icon is in the top bar, one press up from the list or home menu), moves between whole songs in lists, and **holding A** opens a song's menu. You can also set your own **home screen title** in *Settings → Appearance → Home screen*.
 
 ### Fixes
 - The cookie-shaped album cover no longer cuts off the image when the cover changes size.
@@ -73,7 +79,7 @@ You need a recent [Android Studio](https://developer.android.com/studio) (or jus
 
 APKs are written to `app/build/outputs/apk/<debug|release>/CustomCompactGramophone-<version>-<type>.apk`.
 
-For how the compact player, color themes, fonts and controller buttons work, the full list of changed files, and known limitations, see [compact_device_screen_support.md](compact_device_screen_support.md).
+For how the compact player, color themes, fonts, controller buttons and home menu work, the full list of changed files, and known limitations, see [compact_device_screen_support.md](compact_device_screen_support.md).
 
 ## FAQ
 These come from upstream Gramophone and apply to this fork too.

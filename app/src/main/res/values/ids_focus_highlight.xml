@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- View tag key: set to true on views that draw their own focus state (FocusHighlight.kt) -->
+    <item name="focus_highlight_skip" type="id" />
+</resources>

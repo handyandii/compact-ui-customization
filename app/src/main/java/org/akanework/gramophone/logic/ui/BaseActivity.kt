@@ -59,6 +59,12 @@ open class BaseActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
     }
 
+    override fun onPostCreate(savedInstanceState: Bundle?) {
+        super.onPostCreate(savedInstanceState)
+        // After setContentView(), for the main screen and every settings page.
+        FocusHighlight.install(this)
+    }
+
     override fun onDestroy() {
         prefs.unregisterOnSharedPreferenceChangeListener(listener)
         super.onDestroy()

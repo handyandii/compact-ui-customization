@@ -349,14 +349,6 @@ abstract class BaseAdapter<T : Any>(
                 }
             }
             holder.trackCount!!.text = trackCountOf(item)
-            if (hasMenu) {
-                holder.itemView.setOnLongClickListener {
-                    val popupMenu = PopupMenu(it.context, it)
-                    onMenu(item, popupMenu)
-                    popupMenu.show()
-                    true
-                }
-            }
         }
         holder.title.text = titleOf(item) ?: virtualTitleOf(item)
         holder.subTitle.text = subTitleOf(item)
@@ -375,6 +367,15 @@ abstract class BaseAdapter<T : Any>(
                 val popupMenu = PopupMenu(it.context, it)
                 onMenu(item, popupMenu)
                 popupMenu.show()
+            }
+            // For game controllers: the D-pad moves between rows rather than stopping on the
+            // menu button, and holding A (or a long press) opens the menu in every layout.
+            holder.moreButton?.isFocusable = false
+            holder.itemView.setOnLongClickListener {
+                val popupMenu = PopupMenu(it.context, it)
+                onMenu(item, popupMenu)
+                popupMenu.show()
+                true
             }
         } else {
             holder.moreButton?.visibility = View.GONE

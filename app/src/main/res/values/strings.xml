@@ -1373,11 +1373,13 @@ supporting local search. This string is displayed in the search bar when using G
     <!-- Settings switch: use gamepad buttons to control playback -->
     <string name="settings_controller_buttons">Controller playback buttons</string>
     <!-- Summary for the controller buttons switch, names the gamepad buttons -->
-    <string name="settings_controller_buttons_summary">Control playback with the buttons set below</string>
+    <string name="settings_controller_buttons_summary">Control playback and switch layouts with the buttons set below</string>
     <!-- Controller action names, shown in the controller button list -->
     <string name="controller_action_play_pause">Play/pause</string>
     <string name="controller_action_previous">Previous track</string>
     <string name="controller_action_next">Next track</string>
+    <!-- Controller action: compact/full player when the player is open, home menu/tabs otherwise -->
+    <string name="controller_action_switch_layout">Switch layout</string>
     <!-- Controller action without a button -->
     <string name="controller_button_not_set">Not set</string>
     <!-- Controller button dialog: the button currently doing this action, %1$s is the button name (e.g. L1) -->
@@ -1392,4 +1394,14 @@ supporting local search. This string is displayed in the search bar when using G
     <string name="controller_button_waiting">Press the button to use for %1$s.\n\nTap Cancel to stop. The action stays without a button until you set one.</string>
     <!-- Toast: a button was moved from another action, %1$s is the button, %2$s the other action -->
     <string name="controller_button_moved">%1$s no longer does %2$s</string>
+    <!-- Home menu: big shortcut tiles to library categories, for game controllers -->
+    <string name="settings_home_menu">Home menu by default</string>
+    <string name="settings_home_menu_summary">Start with big shortcuts to Artists, Albums, Songs and Playlists instead of tabs, easier to use with a game controller. Switch anytime from the ⋮ menu or with the controller\'s Switch layout button</string>
+    <!-- Setting and dialog title: custom text for the big title on the home screen (default: app name) -->
+    <string name="settings_home_title">Home screen title</string>
+    <!-- Home screen overflow menu items that switch between the home menu and the tabs -->
+    <string name="home_menu_use_menu">Show home menu</string>
+    <string name="home_menu_use_tabs">Show tabs</string>
+    <!-- Content description of the toolbar back button that returns to the home menu -->
+    <string name="home_menu_back">Back to home menu</string>
 </resources>

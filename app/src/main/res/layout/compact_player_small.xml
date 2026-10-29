@@ -12,6 +12,7 @@
         android:id="@+id/compact_cover_frame"
         android:layout_width="140dp"
         android:layout_height="140dp"
+        android:layout_marginTop="16dp"
         app:layout_constraintBottom_toTopOf="@id/compact_text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
